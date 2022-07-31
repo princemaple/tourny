@@ -1,0 +1,55 @@
+<ng-container [ngSwitch]="fileType">
+  <a *ngSwitchCase="'image'" [href]="filePath" target="_blank">
+    <ng-container *ngTemplateOutlet="card"></ng-container>
+  </a>
+  <a *ngSwitchCase="'pdf'" [href]="filePath" target="_blank">
+    <ng-container *ngTemplateOutlet="card"></ng-container>
+  </a>
+  <a *ngSwitchCase="'upload'" [href]="filePath" [download]="fileName">
+    <ng-container *ngTemplateOutlet="card"></ng-container>
+  </a>
+  <ng-container *ngSwitchDefault>
+    <ng-container *ngTemplateOutlet="card"></ng-container>
+  </ng-container>
+</ng-container>
+
+<div class="actions flex gap-1">
+  <button *ngIf="isUpload(file) && renameable" type="button" mat-mini-fab (click)="rename(file)">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <a
+    mat-mini-fab
+    color="primary"
+    *ngIf="downloadable && (fileType == 'pdf' || fileType == 'image')"
+    [href]="filePath"
+    [download]="fileName"
+  >
+    <mat-icon>download</mat-icon>
+  </a>
+
+  <button *ngIf="deletable" type="button" mat-mini-fab color="warn" (click)="delete.emit(file)">
+    <mat-icon>delete_forever</mat-icon>
+  </button>
+</div>
+
+<div class="file-name">
+  {{ fileName }}
+</div>
+
+<ng-template #card>
+  <mat-card class="file-logo !flex justify-center items-center">
+    <ng-container *ngIf="!uploading; else uploadProgress" [ngSwitch]="fileType">
+      <img
+        *ngSwitchCase="'image'"
+        class="file-preview-image"
+        src="{{ filePath }}"
+        alt="downloading {{ fileName }} ..."
+      />
+      <span *ngSwitchDefault>{{ fileExt }}</span>
+    </ng-container>
+    <ng-template #uploadProgress>
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </ng-template>
+  </mat-card>
+</ng-template>

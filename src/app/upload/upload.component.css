@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  margin: 1em 0;
+}
+
+.upload {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.camera {
+  grid-area: camera;
+}
+
+.drop-zone {
+  border: solid 2px #ccc;
+  border-radius: 4px;
+  height: 56px;
+
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ccc;
+}
+
+.camera,
+.drop-zone {
+  cursor: pointer;
+}
+
+.dragging {
+  border: dashed 2px #ccc;
+}

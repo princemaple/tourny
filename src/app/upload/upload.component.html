@@ -1,0 +1,46 @@
+<div *ngIf="control" class="upload">
+  <button class="camera" type="button" mat-stroked-button (click)="cameraFile.click()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <input
+    #cameraFile
+    type="file"
+    accept="image/*,application/pdf"
+    capture
+    hidden
+    (change)="handleFileChange($event)"
+  />
+  <div
+    class="drop-zone"
+    (click)="filePicker.click()"
+    [class.dragging]="dragging"
+    (drop)="dropFiles($event)"
+    (dragover)="cancel($event)"
+    (document:dragenter)="dragging = true"
+    (document:dragexit)="dragging = false"
+  >
+    <span>Drag file into here ...</span>
+  </div>
+  <button
+    type="button"
+    mat-stroked-button
+    [color]="paste ? 'accent' : 'default'"
+    (click)="paste = !paste"
+    (document:paste)="paste && pasteImage($event)"
+  >
+    <mat-icon>content_paste</mat-icon>
+  </button>
+  <input #filePicker type="file" (change)="handleFileChange($event)" multiple hidden />
+</div>
+
+<div *ngIf="files?.length" class="flex gap-4">
+  <upload-file
+    *ngFor="let file of files"
+    [file]="file"
+    (uploaded)="handleUploaded($event)"
+    [deletable]="delete"
+    [renameable]="rename"
+    [downloadable]="false"
+    (delete)="removeFile($event)"
+  ></upload-file>
+</div>

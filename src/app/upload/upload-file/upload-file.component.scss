@@ -1,0 +1,50 @@
+:host {
+  --dimension: 80px;
+
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+}
+
+a {
+  text-decoration: none;
+}
+
+.file-logo {
+  width: var(--dimension);
+  height: var(--dimension);
+
+  text-transform: uppercase;
+  font-weight: bold;
+
+  padding: 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.file-preview-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.file-name {
+  width: var(--dimension);
+  word-break: break-all;
+  word-wrap: anywhere;
+}
+
+.file-logo,
+.file-name {
+  margin-bottom: 1em;
+}
+
+:host.suggestion {
+  --dimension: 60px;
+}
+
+.actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(30%, -30%);
+}

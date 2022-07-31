@@ -38,6 +38,7 @@ testem.log
 /typings
 
 # System files
+desktop.ini
 .DS_Store
 Thumbs.db
 
