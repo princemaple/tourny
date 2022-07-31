@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "sync-types": "npx openapi-typescript https://llulsymsupvwhcabnxxl.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsdWxzeW1zdXB2d2hjYWJueHhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTkyNTc5NTcsImV4cCI6MTk3NDgzMzk1N30.lyIpTvwNLnp3eANJ2_fuoRQlUtDl5BxSQqJqp6PkmrE --output types/supabase.ts"
   },
   "private": true,
   "dependencies": {
@@ -17,6 +18,8 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "date-fns": "^2.29.1",
+    "lodash-es": "^4.17.21",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -25,6 +28,7 @@
     "@angular-devkit/build-angular": "^14.1.0",
     "@angular/cli": "~14.1.0",
     "@angular/compiler-cli": "^14.1.0",
+    "tailwindcss": "^3.1.7",
     "typescript": "~4.7.2"
   }
 }
