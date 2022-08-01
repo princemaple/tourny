@@ -1,10 +1,16 @@
-<mat-card *ngFor="let t of tournaments">
+<mat-card *ngFor="let t of tournaments" class="!flex flex-col">
   <mat-card-title>{{ t.name }}</mat-card-title>
-  <mat-card-subtitle>{{ t.description }}</mat-card-subtitle>
-  <mat-card-content>
-    <ul>
+  <mat-card-subtitle>
+    <span>{{ t.start_at | date }}</span>
+    <span *ngIf="t.end_at"> - {{ t.end_at | date }}</span>
+  </mat-card-subtitle>
+  <mat-card-content class="flex-1">
+    <p>
+      {{ t.description }}
+    </p>
+    <ol class="marker:text-slate-400">
       <li *ngFor="let s of t.stage | sort: 'order'">{{ s.name }} - {{ s.type | apply: casing }}</li>
-    </ul>
+    </ol>
   </mat-card-content>
   <mat-card-actions>
     <a mat-button routerLink="/tournaments/{{ t.id }}/edit">Edit</a>

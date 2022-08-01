@@ -22,7 +22,7 @@ export class TournamentFormComponent {
 
       const {data} = await supa.base
         .from<definitions['tournament']>('tournament')
-        .select('id, name, description, stage (*)')
+        .select('id, name, description, meta, stage (*)')
         .eq('id', id)
         .single();
 
@@ -33,7 +33,7 @@ export class TournamentFormComponent {
   async submit(f: NgForm) {
     const {error} = await this.supa.base
       .from<definitions['tournament']>('tournament')
-      .upsert({...f.value, id: this.params.id});
+      .upsert({...f.value, user_id: this.supa.user!.id, id: this.params.id});
 
     if (error) {
       alert('An error occurred, please try again or report the error. Thank you!');

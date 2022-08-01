@@ -18,7 +18,30 @@
     ></textarea>
   </mat-form-field>
 
+  <mat-form-field appearance="standard">
+    <mat-label>Start</mat-label>
+    <input
+      matInput
+      [matDatepicker]="startPicker"
+      [ngModel]="params.start_at"
+      name="start_at"
+      required
+    />
+    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>End</mat-label>
+    <input matInput [matDatepicker]="endPicker" [ngModel]="params.end_at" name="end_at" />
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+
+  <key-value class="mb-4" [ngModel]="params.meta" name="meta"></key-value>
+
   <div class="flex gap-4">
     <button mat-raised-button color="primary" [disabled]="f.invalid">Submit</button>
+    <a mat-button routerLink="/dashboard">Back</a>
   </div>
 </form>
