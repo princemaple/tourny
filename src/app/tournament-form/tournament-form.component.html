@@ -18,7 +18,7 @@
     ></textarea>
   </mat-form-field>
 
-  <mat-form-field appearance="standard">
+  <mat-form-field appearance="fill">
     <mat-label>Start</mat-label>
     <input
       matInput
@@ -31,7 +31,7 @@
     <mat-datepicker #startPicker></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="standard">
+  <mat-form-field appearance="fill">
     <mat-label>End</mat-label>
     <input matInput [matDatepicker]="endPicker" [ngModel]="params.end_at" name="end_at" />
     <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
