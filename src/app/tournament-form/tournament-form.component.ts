@@ -22,7 +22,7 @@ export class TournamentFormComponent {
 
       const {data} = await supa.base
         .from<definitions['tournament']>('tournament')
-        .select('id, name, description, meta, stage (*)')
+        .select('id, name, description, start_at, end_at, meta, stage (*)')
         .eq('id', id)
         .single();
 
