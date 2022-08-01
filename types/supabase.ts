@@ -24,6 +24,8 @@ export interface paths {
           user_id?: parameters["rowFilter.tournament.user_id"];
           created_at?: parameters["rowFilter.tournament.created_at"];
           updated_at?: parameters["rowFilter.tournament.updated_at"];
+          start_at?: parameters["rowFilter.tournament.start_at"];
+          end_at?: parameters["rowFilter.tournament.end_at"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -82,6 +84,8 @@ export interface paths {
           user_id?: parameters["rowFilter.tournament.user_id"];
           created_at?: parameters["rowFilter.tournament.created_at"];
           updated_at?: parameters["rowFilter.tournament.updated_at"];
+          start_at?: parameters["rowFilter.tournament.start_at"];
+          end_at?: parameters["rowFilter.tournament.end_at"];
         };
         header: {
           /** Preference */
@@ -104,6 +108,8 @@ export interface paths {
           user_id?: parameters["rowFilter.tournament.user_id"];
           created_at?: parameters["rowFilter.tournament.created_at"];
           updated_at?: parameters["rowFilter.tournament.updated_at"];
+          start_at?: parameters["rowFilter.tournament.start_at"];
+          end_at?: parameters["rowFilter.tournament.end_at"];
         };
         body: {
           /** tournament */
@@ -562,6 +568,10 @@ export interface definitions {
      * @default now()
      */
     updated_at: string;
+    /** Format: timestamp with time zone */
+    start_at?: string;
+    /** Format: timestamp with time zone */
+    end_at?: string;
   };
   participant: {
     /**
@@ -750,6 +760,10 @@ export interface parameters {
   "rowFilter.tournament.created_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.tournament.updated_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.tournament.start_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.tournament.end_at": string;
   /** @description participant */
   "body.participant": definitions["participant"];
   /** Format: uuid */
