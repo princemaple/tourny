@@ -1,6 +1,6 @@
 <div *ngIf="control" class="upload">
   <button class="camera" type="button" mat-stroked-button (click)="cameraFile.click()">
-    <mat-icon>add</mat-icon>
+    <mat-icon fontIcon="add"></mat-icon>
   </button>
   <input
     #cameraFile
@@ -28,7 +28,7 @@
     (click)="paste = !paste"
     (document:paste)="paste && pasteImage($event)"
   >
-    <mat-icon>content_paste</mat-icon>
+    <mat-icon fontIcon="content_paste"></mat-icon>
   </button>
   <input #filePicker type="file" (change)="handleFileChange($event)" multiple hidden />
 </div>
