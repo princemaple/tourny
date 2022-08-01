@@ -1,0 +1,21 @@
+<mat-card *ngFor="let t of tournaments">
+  <mat-card-title>{{ t.name }}</mat-card-title>
+  <mat-card-subtitle>{{ t.description }}</mat-card-subtitle>
+  <mat-card-content>
+    <ul>
+      <li *ngFor="let s of t.stage | sort: 'order'">{{ s.name }} - {{ s.type | apply: casing }}</li>
+    </ul>
+  </mat-card-content>
+  <mat-card-actions>
+    <a mat-button routerLink="/tournaments/{{ t.id }}/edit">Edit</a>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card>
+  <mat-card-content class="h-full !flex flex-col justify-center items-center">
+    <p>New tournament</p>
+    <a mat-icon-button routerLink="/tournaments/new">
+      <mat-icon>add</mat-icon>
+    </a>
+  </mat-card-content>
+</mat-card>

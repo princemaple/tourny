@@ -1,0 +1,24 @@
+<form (ngSubmit)="submit(f)" #f="ngForm" class="mt-4 min-w-[360px] flex flex-col items-stretch">
+  <mat-form-field appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput [ngModel]="params.name" name="name" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      [ngModel]="params.description"
+      name="description"
+      required
+      cdkTextareaAutosize
+      [cdkAutosizeMinRows]="8"
+      [cdkAutosizeMaxRows]="20"
+      required
+    ></textarea>
+  </mat-form-field>
+
+  <div class="flex gap-4">
+    <button mat-raised-button color="primary" [disabled]="f.invalid">Submit</button>
+  </div>
+</form>

@@ -11,9 +11,14 @@ import {MatCardModule} from '@angular/material/card';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {TournamentFormComponent} from './tournament-form/tournament-form.component';
+
+import {ApplyPipe} from './utils/apply.pipe';
+import {SortPipe} from './utils/sort.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ApplyPipe, SortPipe, DashboardComponent, TournamentFormComponent],
   imports: [
     BrowserModule,
     FormsModule,

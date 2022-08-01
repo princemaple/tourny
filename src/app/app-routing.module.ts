@@ -1,6 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {LoginGuard} from './login.guard';
+import {TournamentFormComponent} from './tournament-form/tournament-form.component';
+
 const routes: Routes = [
   {
     path: 'login',
@@ -11,6 +15,24 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: 'login',
+  },
+
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [LoginGuard],
+  },
+
+  {
+    path: 'tournaments/:id/edit',
+    component: TournamentFormComponent,
+    canActivate: [LoginGuard],
+  },
+
+  {
+    path: 'tournaments/new',
+    component: TournamentFormComponent,
+    canActivate: [LoginGuard],
   },
 ];
 
