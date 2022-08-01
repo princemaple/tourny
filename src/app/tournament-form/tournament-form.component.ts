@@ -3,6 +3,7 @@ import {NgForm} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {definitions} from 'types/supabase';
+import {ModelArrayComponent} from '../model-array/model-array.component';
 
 import {SupaService} from '../supa.service';
 
@@ -12,7 +13,9 @@ import {SupaService} from '../supa.service';
   styleUrls: ['./tournament-form.component.scss'],
 })
 export class TournamentFormComponent {
-  params = {meta: {}, stage: []} as Partial<definitions['tournament']>;
+  params = {meta: {}, stage: []} as Partial<
+    definitions['tournament'] & {stage: definitions['stage'][]}
+  >;
 
   constructor(private route: ActivatedRoute, private router: Router, private supa: SupaService) {
     this.route.params.subscribe(async ({id}) => {
@@ -31,14 +34,30 @@ export class TournamentFormComponent {
   }
 
   async submit(f: NgForm) {
-    const {error} = await this.supa.base
+    const {stage, ...fields} = f.value;
+    const {error, data} = await this.supa.base
       .from<definitions['tournament']>('tournament')
-      .upsert({...f.value, user_id: this.supa.user!.id, id: this.params.id});
+      .upsert({...fields, user_id: this.supa.user!.id, id: this.params.id})
+      .single();
 
     if (error) {
       alert('An error occurred, please try again or report the error. Thank you!');
     } else {
+      for (let s of stage as definitions['stage'][]) {
+        await this.supa.base
+          .from<definitions['stage']>('stage')
+          .upsert({...s, tournament_id: data!.id});
+      }
       this.router.navigateByUrl('dashboard');
     }
+  }
+
+  newStage(array: ModelArrayComponent<any>): Partial<definitions['stage']> {
+    return {
+      name: '',
+      type: 'round_robin',
+      user_id: this.supa.user!.id,
+      order: array.items.value.length,
+    };
   }
 }

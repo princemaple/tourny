@@ -3,7 +3,7 @@
 <ng-container *ngIf="render">
   <ng-container *ngFor="let element of items | async; index as i; trackBy: trackByFn">
     <ng-container
-      *ngTemplateOutlet="item.template; context: {$implicit: element, index: i}"
+      *ngTemplateOutlet="item.template; context: {$implicit: element, index: i}; injector: injector"
     ></ng-container>
   </ng-container>
 </ng-container>

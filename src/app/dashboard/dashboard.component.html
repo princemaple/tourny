@@ -5,9 +5,7 @@
     <span *ngIf="t.end_at"> - {{ t.end_at | date }}</span>
   </mat-card-subtitle>
   <mat-card-content class="flex-1">
-    <p>
-      {{ t.description }}
-    </p>
+    <pre class="whitespace-pre-wrap">{{ t.description }}</pre>
     <ol class="marker:text-slate-400">
       <li *ngFor="let s of t.stage | sort: 'order'">{{ s.name }} - {{ s.type | apply: casing }}</li>
     </ol>
