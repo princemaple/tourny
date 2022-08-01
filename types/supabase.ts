@@ -234,6 +234,7 @@ export interface paths {
           user_id?: parameters["rowFilter.stage.user_id"];
           created_at?: parameters["rowFilter.stage.created_at"];
           updated_at?: parameters["rowFilter.stage.updated_at"];
+          type?: parameters["rowFilter.stage.type"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Limiting and Pagination */
@@ -289,6 +290,7 @@ export interface paths {
           user_id?: parameters["rowFilter.stage.user_id"];
           created_at?: parameters["rowFilter.stage.created_at"];
           updated_at?: parameters["rowFilter.stage.updated_at"];
+          type?: parameters["rowFilter.stage.type"];
         };
         header: {
           /** Preference */
@@ -310,10 +312,106 @@ export interface paths {
           user_id?: parameters["rowFilter.stage.user_id"];
           created_at?: parameters["rowFilter.stage.created_at"];
           updated_at?: parameters["rowFilter.stage.updated_at"];
+          type?: parameters["rowFilter.stage.type"];
         };
         body: {
           /** stage */
           stage?: definitions["stage"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/group_participants": {
+    get: {
+      parameters: {
+        query: {
+          group_id?: parameters["rowFilter.group_participants.group_id"];
+          participant_id?: parameters["rowFilter.group_participants.participant_id"];
+          /** Ordering */
+          order?: parameters["order"];
+          created_at?: parameters["rowFilter.group_participants.created_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["group_participants"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** group_participants */
+          group_participants?: definitions["group_participants"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          group_id?: parameters["rowFilter.group_participants.group_id"];
+          participant_id?: parameters["rowFilter.group_participants.participant_id"];
+          order?: parameters["rowFilter.group_participants.order"];
+          created_at?: parameters["rowFilter.group_participants.created_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          group_id?: parameters["rowFilter.group_participants.group_id"];
+          participant_id?: parameters["rowFilter.group_participants.participant_id"];
+          order?: parameters["rowFilter.group_participants.order"];
+          created_at?: parameters["rowFilter.group_participants.created_at"];
+        };
+        body: {
+          /** group_participants */
+          group_participants?: definitions["group_participants"];
         };
         header: {
           /** Preference */
@@ -527,6 +625,37 @@ export interface definitions {
      * @default now()
      */
     updated_at: string;
+    /**
+     * Format: public.stage_types
+     * @enum {string}
+     */
+    type: "round_robin" | "elimination" | "upper_lower";
+  };
+  group_participants: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     * This is a Foreign Key to `group.id`.<fk table='group' column='id'/>
+     */
+    group_id: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     * This is a Foreign Key to `participant.id`.<fk table='participant' column='id'/>
+     */
+    participant_id: string;
+    /**
+     * Format: integer
+     * @default 0
+     */
+    order: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at: string;
   };
   group: {
     /**
@@ -651,6 +780,18 @@ export interface parameters {
   "rowFilter.stage.created_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.stage.updated_at": string;
+  /** Format: public.stage_types */
+  "rowFilter.stage.type": string;
+  /** @description group_participants */
+  "body.group_participants": definitions["group_participants"];
+  /** Format: uuid */
+  "rowFilter.group_participants.group_id": string;
+  /** Format: uuid */
+  "rowFilter.group_participants.participant_id": string;
+  /** Format: integer */
+  "rowFilter.group_participants.order": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.group_participants.created_at": string;
   /** @description group */
   "body.group": definitions["group"];
   /** Format: uuid */
