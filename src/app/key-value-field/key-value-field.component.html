@@ -1,0 +1,52 @@
+<mat-expansion-panel *ngIf="!fieldsOnly; else fields" [expanded]="expanded">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{ title }}
+    </mat-panel-title>
+    <mat-panel-description [style.flex-wrap]="'wrap'">
+      <span *ngFor="let kv of _value" class="key-desc">{{ kv[0] }}</span>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <ng-template matExpansionPanelContent>
+    <ng-container [ngTemplateOutlet]="fields"></ng-container>
+  </ng-template>
+
+  <mat-action-row>
+    <button type="button" mat-button color="primary" (click)="addKey()">
+      {{ addButtonText }}
+    </button>
+  </mat-action-row>
+</mat-expansion-panel>
+
+<ng-template #fields>
+  <div *ngFor="let kv of _value; trackBy: trackByFn" class="flex items-center gap-2">
+    <mat-form-field appearance="standard" class="key">
+      <mat-label>Key</mat-label>
+      <input
+        matInput
+        [(ngModel)]="kv[0]"
+        (input)="commit()"
+        (blur)="handleTouch()"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label class="key">Value</mat-label>
+      <input
+        matInput
+        [(ngModel)]="kv[1]"
+        (input)="commit()"
+        (blur)="handleTouch()"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        required
+      />
+    </mat-form-field>
+    <button mat-icon-button type="button" matSuffix (click)="deleteKey(kv[0])">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+</ng-template>

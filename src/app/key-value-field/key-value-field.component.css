@@ -1,0 +1,16 @@
+.key-desc {
+  align-self: flex-end;
+}
+
+.key-desc:not(:last-child)::after {
+  content: ', ';
+}
+
+.mat-expansion-panel-header-description:empty::after {
+  content: 'EMPTY';
+}
+
+.key {
+  width: 40px;
+  flex: 1;
+}

@@ -1,0 +1,9 @@
+<ng-content></ng-content>
+
+<ng-container *ngIf="render">
+  <ng-container *ngFor="let element of items | async; index as i; trackBy: trackByFn">
+    <ng-container
+      *ngTemplateOutlet="item.template; context: {$implicit: element, index: i}"
+    ></ng-container>
+  </ng-container>
+</ng-container>
