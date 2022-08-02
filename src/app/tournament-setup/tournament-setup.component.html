@@ -1,0 +1,43 @@
+<div class="mt-4 min-w-[360px] flex flex-col items-stretch">
+  <div class="flex justify-between items-center mb-4">
+    <a mat-icon-button routerLink="/dashboard">
+      <mat-icon>arrow_back</mat-icon>
+    </a>
+
+    <h3>{{ tournament?.name }}</h3>
+
+    <mat-icon [class.animate-pulse]="pending">{{ pending ? 'pending' : 'check_circle' }}</mat-icon>
+  </div>
+
+  <h4>Participants</h4>
+
+  <p>
+    A participant is, for example, a team in basketball 5v5 / 3v3 tournament, a player in solo
+    tennis tournament.
+  </p>
+
+  <h4>Tournament Participants</h4>
+
+  <mat-chip-list
+    class="mb-4"
+    *ngIf="tournament?.participants?.length"
+    aria-label="participant list"
+    [ngModel]="tournament!.participants"
+    name="participants"
+    required
+  >
+    <mat-chip *ngFor="let p of tournament?.participants">
+      {{ p.name }}
+    </mat-chip>
+  </mat-chip-list>
+
+  <button mat-button type="button" (click)="addParticipant()">Add Participant</button>
+
+  <h4>Tournament Stages</h4>
+
+  <mat-card *ngFor="let s of tournament?.stages" class="mb-4">
+    <mat-card-title>{{ s.name }}</mat-card-title>
+    <mat-card-subtitle>{{ s.type | apply: casing }}</mat-card-subtitle>
+    <mat-card-content class="!flex gap-4"> {{ s.groups | json }}</mat-card-content>
+  </mat-card>
+</div>

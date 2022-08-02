@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {LoginGuard} from './login.guard';
 import {TournamentFormComponent} from './tournament-form/tournament-form.component';
+import {TournamentSetupComponent} from './tournament-setup/tournament-setup.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,12 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [LoginGuard],
+  },
+
+  {
+    path: 'tournaments/:id/setup',
+    component: TournamentSetupComponent,
     canActivate: [LoginGuard],
   },
 

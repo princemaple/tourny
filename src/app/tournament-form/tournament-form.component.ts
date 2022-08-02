@@ -7,15 +7,15 @@ import {ModelArrayComponent} from '../model-array/model-array.component';
 
 import {SupaService} from '../supa.service';
 
+type Data = Partial<definitions['tournament'] & {stage: definitions['stage'][]}>;
+
 @Component({
   selector: 'tn-tournament-form',
   templateUrl: './tournament-form.component.html',
   styleUrls: ['./tournament-form.component.scss'],
 })
 export class TournamentFormComponent {
-  params = {meta: {}, stage: [this.newStage()]} as Partial<
-    definitions['tournament'] & {stage: definitions['stage'][]}
-  >;
+  params = {meta: {}, stage: [this.newStage()]} as Data;
 
   constructor(private route: ActivatedRoute, private router: Router, private supa: SupaService) {
     this.route.params.subscribe(async ({id}) => {
@@ -24,7 +24,7 @@ export class TournamentFormComponent {
       }
 
       const {data} = await supa.base
-        .from<definitions['tournament']>('tournament')
+        .from<Data>('tournament')
         .select('id, name, description, start_at, end_at, meta, stage (*)')
         .eq('id', id)
         .single();
