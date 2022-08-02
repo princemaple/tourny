@@ -13,7 +13,7 @@ import {SupaService} from '../supa.service';
   styleUrls: ['./tournament-form.component.scss'],
 })
 export class TournamentFormComponent {
-  params = {meta: {}, stage: []} as Partial<
+  params = {meta: {}, stage: [this.newStage()]} as Partial<
     definitions['tournament'] & {stage: definitions['stage'][]}
   >;
 
@@ -52,12 +52,12 @@ export class TournamentFormComponent {
     }
   }
 
-  newStage(array: ModelArrayComponent<any>): Partial<definitions['stage']> {
+  newStage(array?: ModelArrayComponent<any>): Partial<definitions['stage']> {
     return {
       name: '',
       type: 'round_robin',
       user_id: this.supa.user!.id,
-      order: array.items.value.length,
+      order: array ? array.items.value.length : 0,
     };
   }
 }
