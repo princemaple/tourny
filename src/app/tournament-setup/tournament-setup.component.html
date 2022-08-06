@@ -9,35 +9,59 @@
     <mat-icon [class.animate-pulse]="pending">{{ pending ? 'pending' : 'check_circle' }}</mat-icon>
   </div>
 
-  <h4>Participants</h4>
+  <section class="flex flex-col">
+    <h4>Tournament Participants</h4>
 
-  <p>
-    A participant is, for example, a team in basketball 5v5 / 3v3 tournament, a player in solo
-    tennis tournament.
-  </p>
+    <div class="text-slate-500 rounded bg-gray-100 p-4">
+      A participant is, for example, a "team" in basketball 5v5 / 3v3 tournament, a "player" in solo
+      tennis tournament.
+    </div>
 
-  <h4>Tournament Participants</h4>
+    <h5>Participants</h5>
 
-  <mat-chip-list
-    class="mb-4"
-    *ngIf="tournament?.participants?.length"
-    aria-label="participant list"
-    [ngModel]="tournament!.participants"
-    name="participants"
-    required
-  >
-    <mat-chip *ngFor="let p of tournament?.participants">
-      {{ p.name }}
-    </mat-chip>
-  </mat-chip-list>
+    <mat-chip-list
+      class="mb-4"
+      *ngIf="tournament?.participants?.length"
+      aria-label="participant list"
+      [ngModel]="tournament!.participants"
+      name="participants"
+      required
+    >
+      <mat-chip *ngFor="let p of tournament?.participants">
+        {{ p.name }}
+      </mat-chip>
+    </mat-chip-list>
 
-  <button mat-button type="button" (click)="addParticipant()">Add Participant</button>
+    <button mat-button color="primary" type="button" (click)="addParticipant()">
+      Add Participant
+    </button>
+  </section>
 
   <h4>Tournament Stages</h4>
 
   <mat-card *ngFor="let s of tournament?.stages" class="mb-4">
     <mat-card-title>{{ s.name }}</mat-card-title>
-    <mat-card-subtitle>{{ s.type | apply: casing }}</mat-card-subtitle>
-    <mat-card-content class="!flex gap-4"> {{ s.groups | json }}</mat-card-content>
+    <mat-card-subtitle>
+      <span>{{ s.type | apply: casing }}</span>
+      <span *ngIf="s.groups.length as count">, Group count: {{ count }}</span>
+    </mat-card-subtitle>
+    <mat-card-content class="!flex gap-4">
+      <div class="p-4 min-w-[20px] bg-slate-200 rounded" *ngFor="let g of s.groups">
+        <h4 class="m-0">Group {{ g.order | apply: groupName }}</h4>
+
+        <ul class="list-none p-0">
+          <li *ngFor="let p of g.participants">
+            {{ p.name }}
+          </li>
+        </ul>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="addGroup(s)">Add Group</button>
+      <button *ngIf="s.groups.length" mat-button color="primary" (click)="fillParticipants(s)">
+        Auto Fill
+      </button>
+    </mat-card-actions>
   </mat-card>
 </div>

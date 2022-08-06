@@ -11,7 +11,9 @@ import {SupaService} from '../supa.service';
 type Data = Partial<
   definitions['tournament'] & {
     stages: (definitions['stage'] & {
-      groups: definitions['group'][];
+      groups: (definitions['group'] & {
+        participants: definitions['participant'][];
+      })[];
     })[];
     participants: definitions['participant'][];
   }
@@ -38,7 +40,7 @@ export class TournamentSetupComponent {
         .select(
           `
           id, name, description, start_at, end_at, meta,
-          stages:stage(*, groups:group(*)),
+          stages:stage(*, groups:group(*, participants:participant(name))),
           participants:participant(*)
         `,
         )
@@ -50,6 +52,10 @@ export class TournamentSetupComponent {
   }
 
   casing = startCase;
+  groupName = (n: number) => {
+    console.log(n);
+    return String.fromCharCode('A'.charCodeAt(0) + n);
+  };
 
   async addParticipant() {
     const fd = await import('../form-dialog/form-dialog.component').then(
@@ -59,9 +65,7 @@ export class TournamentSetupComponent {
     this.dialog
       .open(fd, {
         data: {
-          submitText: 'Save',
-          cancelText: 'Cancel',
-          fields: [{name: 'name', label: 'Name', placeholder: 'Jane Doe'}],
+          fields: [{name: 'name', label: 'Name', placeholder: 'Team Smith / Jane Doe'}],
         },
       })
       .afterClosed()
@@ -91,5 +95,50 @@ export class TournamentSetupComponent {
           this.pending = false;
         }
       });
+  }
+
+  async addGroup(s: Exclude<Data['stages'], undefined>[number]) {
+    const {data: group, error} = await this.supa.base
+      .from<definitions['group']>('group')
+      .insert({
+        user_id: this.supa.user!.id,
+        tournament_id: this.tournament!.id,
+        stage_id: s.id,
+        order: s.groups.length,
+        name: this.groupName(s.groups.length),
+      } as definitions['group'])
+      .single();
+
+    if (!error) {
+      s.groups = [...s.groups!, group] as any;
+    }
+  }
+
+  fillParticipants(s: Exclude<Data['stages'], undefined>[number]) {
+    const requests = this.tournament!.participants!.map(async (p, i) => {
+      const g = s.groups[i % s.groups.length];
+      const {error} = await this.supa.base
+        .from<definitions['group_participants']>('group_participants')
+        .upsert({group_id: g.id, participant_id: p.id, order: g.participants.length})
+        .single();
+
+      if (error) {
+        alert(`Failed to add participant ${p.name} to Group ${g.name}!`);
+      }
+    });
+
+    Promise.allSettled(requests).then(async () => {
+      const {data, error} = await this.supa.base
+        .from<Exclude<Data['stages'], undefined>[number]>('stage')
+        .select('*, groups:group(*, participants:participant(name))')
+        .eq('id', s.id)
+        .single();
+
+      if (error) {
+        alert('Failed to refresh stage data!');
+      } else {
+        Object.assign(s, data);
+      }
+    });
   }
 }
