@@ -52,10 +52,7 @@ export class TournamentSetupComponent {
   }
 
   casing = startCase;
-  groupName = (n: number) => {
-    console.log(n);
-    return String.fromCharCode('A'.charCodeAt(0) + n);
-  };
+  groupName = (n: number) => String.fromCharCode('A'.charCodeAt(0) + n);
 
   async addParticipant() {
     const fd = await import('../form-dialog/form-dialog.component').then(
