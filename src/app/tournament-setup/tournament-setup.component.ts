@@ -99,7 +99,7 @@ export class TournamentSetupComponent {
   }
 
   async removeParticipant(p: definitions['participant']) {
-    const resp = await this.supa.base
+    await this.supa.base
       .from('group_participants')
       .delete({count: 'exact'})
       .match({participant_id: p.id});
