@@ -107,35 +107,34 @@ export class TournamentSetupComponent {
       .single();
 
     if (!error) {
-      s.groups = [...s.groups!, group] as any;
+      s.groups = [...s.groups!, {...group, participants: []}] as any;
     }
   }
 
-  fillParticipants(s: Exclude<Data['stages'], undefined>[number]) {
-    const requests = this.tournament!.participants!.map(async (p, i) => {
+  async fillParticipants(s: Exclude<Data['stages'], undefined>[number]) {
+    const groupParticipants = this.tournament!.participants!.map((p, i) => {
       const g = s.groups[i % s.groups.length];
-      const {error} = await this.supa.base
-        .from<definitions['group_participants']>('group_participants')
-        .upsert({group_id: g.id, participant_id: p.id, order: g.participants.length})
-        .single();
-
-      if (error) {
-        alert(`Failed to add participant ${p.name} to Group ${g.name}!`);
-      }
+      return {group_id: g.id, participant_id: p.id, order: Math.floor(i / s.groups.length)};
     });
 
-    Promise.allSettled(requests).then(async () => {
-      const {data, error} = await this.supa.base
-        .from<Exclude<Data['stages'], undefined>[number]>('stage')
-        .select('*, groups:group(*, participants:participant(name))')
-        .eq('id', s.id)
-        .single();
+    const insertGroupParticipants = await this.supa.base
+      .from<definitions['group_participants']>('group_participants')
+      .upsert(groupParticipants);
 
-      if (error) {
-        alert('Failed to refresh stage data!');
-      } else {
-        Object.assign(s, data);
-      }
-    });
+    if (insertGroupParticipants.error) {
+      return alert(`Failed to fill participants into groups!`);
+    }
+
+    const reloadStage = await this.supa.base
+      .from<Exclude<Data['stages'], undefined>[number]>('stage')
+      .select('*, groups:group(*, participants:participant(name))')
+      .eq('id', s.id)
+      .single();
+
+    if (reloadStage.error) {
+      alert('Failed to refresh stage data!');
+    } else {
+      Object.assign(s, reloadStage.data);
+    }
   }
 }
