@@ -27,8 +27,11 @@
       name="participants"
       required
     >
-      <mat-chip *ngFor="let p of tournament?.participants">
+      <mat-chip *ngFor="let p of tournament?.participants" (removed)="removeParticipant(p)">
         {{ p.name }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
       </mat-chip>
     </mat-chip-list>
 

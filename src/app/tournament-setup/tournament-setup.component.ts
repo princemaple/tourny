@@ -30,29 +30,33 @@ export class TournamentSetupComponent {
   pending = false;
 
   constructor(private route: ActivatedRoute, private supa: SupaService, private dialog: MatDialog) {
-    this.route.params.subscribe(async ({id}) => {
+    this.route.params.subscribe(({id}) => {
       if (!id) {
         return;
       }
 
-      const {data} = await supa.base
-        .from<Data>('tournament')
-        .select(
-          `
-          id, name, description, start_at, end_at, meta,
-          stages:stage(*, groups:group(*, participants:participant(name))),
-          participants:participant(*)
-        `,
-        )
-        .eq('id', id)
-        .single();
-
-      this.tournament = data;
+      this.loadTournament(id);
     });
   }
 
   casing = startCase;
   groupName = (n: number) => String.fromCharCode('A'.charCodeAt(0) + n);
+
+  async loadTournament(id: string) {
+    const {data} = await this.supa.base
+      .from<Data>('tournament')
+      .select(
+        `
+          id, name, description, start_at, end_at, meta,
+          stages:stage(*, groups:group(*, participants:participant(name))),
+          participants:participant(*)
+        `,
+      )
+      .eq('id', id)
+      .single();
+
+    this.tournament = data;
+  }
 
   async addParticipant() {
     const fd = await import('../form-dialog/form-dialog.component').then(
@@ -94,6 +98,15 @@ export class TournamentSetupComponent {
       });
   }
 
+  async removeParticipant(p: definitions['participant']) {
+    const resp = await this.supa.base
+      .from('group_participants')
+      .delete({count: 'exact'})
+      .match({participant_id: p.id});
+    await this.supa.base.from('participant').delete().eq('id', p.id);
+    this.loadTournament(p.tournament_id);
+  }
+
   async addGroup(s: Exclude<Data['stages'], undefined>[number]) {
     const {data: group, error} = await this.supa.base
       .from<definitions['group']>('group')
@@ -125,16 +138,20 @@ export class TournamentSetupComponent {
       return alert(`Failed to fill participants into groups!`);
     }
 
-    const reloadStage = await this.supa.base
+    this.loadStage(s);
+  }
+
+  async loadStage(s: definitions['stage']) {
+    const loadStage = await this.supa.base
       .from<Exclude<Data['stages'], undefined>[number]>('stage')
       .select('*, groups:group(*, participants:participant(name))')
       .eq('id', s.id)
       .single();
 
-    if (reloadStage.error) {
+    if (loadStage.error) {
       alert('Failed to refresh stage data!');
     } else {
-      Object.assign(s, reloadStage.data);
+      Object.assign(s, loadStage.data);
     }
   }
 }
