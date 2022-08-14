@@ -42,7 +42,7 @@
 
   <h4>Tournament Stages</h4>
 
-  <mat-card *ngFor="let s of tournament?.stages" class="mb-4">
+  <mat-card *ngFor="let s of tournament?.stages; index as i" class="mb-4">
     <mat-card-title>{{ s.name }}</mat-card-title>
     <mat-card-subtitle>
       <span>{{ s.type | apply: casing }}</span>
@@ -62,7 +62,12 @@
 
     <mat-card-actions>
       <button mat-button color="primary" (click)="addGroup(s)">Add Group</button>
-      <button *ngIf="s.groups.length" mat-button color="primary" (click)="fillParticipants(s)">
+      <button
+        *ngIf="s.groups.length && i === 0"
+        mat-button
+        color="primary"
+        (click)="fillParticipants(s)"
+      >
         Auto Fill
       </button>
     </mat-card-actions>
