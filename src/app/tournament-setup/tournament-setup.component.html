@@ -42,49 +42,59 @@
 
   <h4>Tournament Stages</h4>
 
-  <mat-card *ngFor="let s of tournament?.stages; index as i" class="mb-4" cdkDropListGroup>
-    <mat-card-title>{{ s.name }}</mat-card-title>
-    <mat-card-subtitle>
-      <span>{{ s.type | apply: casing }}</span>
-      <span *ngIf="s.groups.length as count">, Group count: {{ count }}</span>
-    </mat-card-subtitle>
-    <mat-card-content class="!flex gap-4">
-      <div
-        class="p-4 min-w-[20px] bg-slate-200 rounded"
-        *ngFor="let g of s.groups"
-        cdkDropList
-        [cdkDropListData]="g"
-        (cdkDropListDropped)="changeGroup($event, s)"
-      >
-        <h4 class="m-0">Group {{ g.order | apply: groupName }}</h4>
+  <ng-container *ngFor="let s of tournament?.stages; index as i">
+    <mat-card class="mb-4" cdkDropListGroup>
+      <mat-card-title>{{ s.name }}</mat-card-title>
+      <mat-card-subtitle>
+        <span>{{ s.type | apply: casing }}</span>
+        <span *ngIf="s.groups.length as count">, Group count: {{ count }}</span>
+      </mat-card-subtitle>
+      <mat-card-content class="!flex gap-4">
+        <div
+          class="p-4 min-w-[20px] bg-slate-200 rounded"
+          *ngFor="let g of s.groups"
+          cdkDropList
+          [cdkDropListData]="g"
+          (cdkDropListDropped)="changeGroup($event, s)"
+        >
+          <h4 class="m-0">Group {{ g.order | apply: groupName }}</h4>
 
-        <ul class="list-none p-0 mb-0">
-          <li
-            *ngFor="let p of g.participants"
-            cdkDrag
-            [cdkDragData]="p"
-            class="flex items-center mb-1"
-          >
-            <mat-icon cdkDragHandle fontIcon="drag_handle" class="cursor-move text-sm"></mat-icon>
-            <span>{{ p.name }}</span>
-            <span *cdkDragPreview class="block py-1 px-2 bg-slate-300 rounded">{{ p.name }}</span>
-          </li>
-        </ul>
+          <ul class="list-none p-0 mb-0">
+            <li
+              *ngFor="let p of g.participants"
+              cdkDrag
+              [cdkDragData]="p"
+              class="flex items-center mb-1"
+            >
+              <mat-icon cdkDragHandle fontIcon="drag_handle" class="cursor-move text-sm"></mat-icon>
+              <span>{{ p.name }}</span>
+              <span *cdkDragPreview class="block py-1 px-2 bg-slate-300 rounded">{{ p.name }}</span>
+            </li>
+          </ul>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="addGroup(s)">Add Group</button>
+        <button
+          *ngIf="s.groups.length && i === 0"
+          mat-button
+          color="primary"
+          (click)="fillParticipants(s)"
+        >
+          Fill participants
+        </button>
+        <button mat-button (click)="resetParticipants(s)">Remove Participants</button>
+        <button mat-button (click)="dropGroup(s)">Drop a group</button>
+        <button mat-button (click)="genMatches(s)">GEN</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="flex flex-wrap gap-4 mb-4">
+      <div class="p-4 min-w-[20px] bg-slate-200 rounded" *ngFor="let m of s.matches">
+        {{ m.left.name }}<span *ngIf="m.right; else bye"> vs {{ m.right.name }}</span>
+        <ng-template #bye> gets a BYE!</ng-template>
       </div>
-    </mat-card-content>
-
-    <mat-card-actions>
-      <button mat-button color="primary" (click)="addGroup(s)">Add Group</button>
-      <button
-        *ngIf="s.groups.length && i === 0"
-        mat-button
-        color="primary"
-        (click)="fillParticipants(s)"
-      >
-        Fill participants
-      </button>
-      <button mat-button (click)="resetParticipants(s)">Remove Participants</button>
-      <button mat-button (click)="dropGroup(s)">Drop a group</button>
-    </mat-card-actions>
-  </mat-card>
+    </div>
+  </ng-container>
 </div>

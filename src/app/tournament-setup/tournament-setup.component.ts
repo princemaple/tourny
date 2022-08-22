@@ -7,6 +7,7 @@ import {maxBy, startCase} from 'lodash-es';
 import {filter, tap} from 'rxjs';
 
 import {definitions} from 'types/supabase';
+import {genRoundRobinMatches} from '../core/gen-matches';
 import {SupaService} from '../supa.service';
 
 type Data = definitions['tournament'] & {
@@ -14,9 +15,16 @@ type Data = definitions['tournament'] & {
     groups: (definitions['group'] & {
       participants: definitions['participant'][];
     })[];
+    matches: {left: {name: string}; right: {name: string} | null}[];
   })[];
   participants: definitions['participant'][];
 };
+
+const StageQuery = `
+  *,
+  groups:group(*, participants:participant(id, name)),
+  matches:match(left(name), right(name))
+`;
 
 @Component({
   selector: 'tn-tournament-setup',
@@ -47,7 +55,7 @@ export class TournamentSetupComponent {
       .select(
         `
           id, name, description, start_at, end_at, meta,
-          stages:stage(*, groups:group(*, participants:participant(id, name))),
+          stages:stage(${StageQuery}),
           participants:participant(*)
         `,
       )
@@ -143,7 +151,7 @@ export class TournamentSetupComponent {
   async loadStage(s: definitions['stage']) {
     const loadStage = await this.supa.base
       .from<Exclude<Data['stages'], undefined>[number]>('stage')
-      .select('*, groups:group(*, participants:participant(id, name))')
+      .select(StageQuery)
       .eq('id', s.id)
       .single();
 
@@ -191,6 +199,15 @@ export class TournamentSetupComponent {
     if (error) {
       alert('Failed to remove the group at the and. Does it still have participants in it?');
     }
+
+    this.loadStage(s);
+  }
+
+  async genMatches(s: Data['stages'][number]) {
+    await this.supa.base.from<definitions['match']>('match').delete().match({stage_id: s.id});
+
+    const matches = genRoundRobinMatches(s).flat();
+    await this.supa.base.from<definitions['match']>('match').insert(matches);
 
     this.loadStage(s);
   }
