@@ -3,7 +3,7 @@ import {Component} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 
-import {startCase} from 'lodash-es';
+import {maxBy, startCase} from 'lodash-es';
 import {filter, tap} from 'rxjs';
 
 import {definitions} from 'types/supabase';
@@ -178,6 +178,19 @@ export class TournamentSetupComponent {
         'group_id',
         s.groups.map(g => g.id),
       );
+
+    this.loadStage(s);
+  }
+
+  async dropGroup(s: Data['stages'][number]) {
+    const {error} = await this.supa.base
+      .from<definitions['group']>('group')
+      .delete()
+      .eq('id', maxBy(s.groups, 'order')!.id);
+
+    if (error) {
+      alert('Failed to remove the group at the and. Does it still have participants in it?');
+    }
 
     this.loadStage(s);
   }
