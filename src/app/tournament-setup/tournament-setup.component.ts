@@ -1,3 +1,4 @@
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {Component} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
@@ -8,16 +9,14 @@ import {filter, tap} from 'rxjs';
 import {definitions} from 'types/supabase';
 import {SupaService} from '../supa.service';
 
-type Data = Partial<
-  definitions['tournament'] & {
-    stages: (definitions['stage'] & {
-      groups: (definitions['group'] & {
-        participants: definitions['participant'][];
-      })[];
+type Data = definitions['tournament'] & {
+  stages: (definitions['stage'] & {
+    groups: (definitions['group'] & {
+      participants: definitions['participant'][];
     })[];
-    participants: definitions['participant'][];
-  }
->;
+  })[];
+  participants: definitions['participant'][];
+};
 
 @Component({
   selector: 'tn-tournament-setup',
@@ -48,7 +47,7 @@ export class TournamentSetupComponent {
       .select(
         `
           id, name, description, start_at, end_at, meta,
-          stages:stage(*, groups:group(*, participants:participant(name))),
+          stages:stage(*, groups:group(*, participants:participant(id, name))),
           participants:participant(*)
         `,
       )
@@ -124,7 +123,7 @@ export class TournamentSetupComponent {
     }
   }
 
-  async fillParticipants(s: Exclude<Data['stages'], undefined>[number]) {
+  async fillParticipants(s: Data['stages'][number]) {
     const groupParticipants = this.tournament!.participants!.map((p, i) => {
       const g = s.groups[i % s.groups.length];
       return {group_id: g.id, participant_id: p.id, order: Math.floor(i / s.groups.length)};
@@ -144,7 +143,7 @@ export class TournamentSetupComponent {
   async loadStage(s: definitions['stage']) {
     const loadStage = await this.supa.base
       .from<Exclude<Data['stages'], undefined>[number]>('stage')
-      .select('*, groups:group(*, participants:participant(name))')
+      .select('*, groups:group(*, participants:participant(id, name))')
       .eq('id', s.id)
       .single();
 
@@ -153,5 +152,33 @@ export class TournamentSetupComponent {
     } else {
       Object.assign(s, loadStage.data);
     }
+  }
+
+  async changeGroup(
+    event: CdkDragDrop<
+      Data['stages'][number]['groups'][number],
+      Data['stages'][number]['groups'][number],
+      definitions['participant']
+    >,
+    s: definitions['stage'],
+  ) {
+    await this.supa.base
+      .from<definitions['group_participants']>('group_participants')
+      .update({group_id: event.container.data.id})
+      .match({group_id: event.previousContainer.data.id, participant_id: event.item.data.id});
+
+    this.loadStage(s);
+  }
+
+  async resetParticipants(s: Data['stages'][number]) {
+    await this.supa.base
+      .from<definitions['group_participants']>('group_participants')
+      .delete()
+      .in(
+        'group_id',
+        s.groups.map(g => g.id),
+      );
+
+    this.loadStage(s);
   }
 }

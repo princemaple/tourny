@@ -42,19 +42,26 @@
 
   <h4>Tournament Stages</h4>
 
-  <mat-card *ngFor="let s of tournament?.stages; index as i" class="mb-4">
+  <mat-card *ngFor="let s of tournament?.stages; index as i" class="mb-4" cdkDropListGroup>
     <mat-card-title>{{ s.name }}</mat-card-title>
     <mat-card-subtitle>
       <span>{{ s.type | apply: casing }}</span>
       <span *ngIf="s.groups.length as count">, Group count: {{ count }}</span>
     </mat-card-subtitle>
     <mat-card-content class="!flex gap-4">
-      <div class="p-4 min-w-[20px] bg-slate-200 rounded" *ngFor="let g of s.groups">
+      <div
+        class="p-4 min-w-[20px] bg-slate-200 rounded"
+        *ngFor="let g of s.groups"
+        cdkDropList
+        [cdkDropListData]="g"
+        (cdkDropListDropped)="changeGroup($event, s)"
+      >
         <h4 class="m-0">Group {{ g.order | apply: groupName }}</h4>
 
-        <ul class="list-none p-0">
-          <li *ngFor="let p of g.participants">
+        <ul class="list-none p-0 mb-0">
+          <li *ngFor="let p of g.participants" cdkDrag [cdkDragData]="p">
             {{ p.name }}
+            <span *cdkDragPreview class="block py-1 px-2 bg-slate-300 rounded">{{ p.name }}</span>
           </li>
         </ul>
       </div>
@@ -68,8 +75,9 @@
         color="primary"
         (click)="fillParticipants(s)"
       >
-        Auto Fill
+        Fill participants
       </button>
+      <button mat-button (click)="resetParticipants(s)">Remove Participants</button>
     </mat-card-actions>
   </mat-card>
 </div>

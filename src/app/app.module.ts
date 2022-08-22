@@ -3,6 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule} from '@angular/forms';
 
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
@@ -40,6 +41,7 @@ import {ModelArrayModule} from './model-array/model-array.module';
     AppRoutingModule,
     BrowserAnimationsModule,
 
+    DragDropModule,
     MatInputModule,
     MatFormFieldModule,
     MatChipsModule,
@@ -54,7 +56,6 @@ import {ModelArrayModule} from './model-array/model-array.module';
     KeyValueFieldModule,
     ModelArrayModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
