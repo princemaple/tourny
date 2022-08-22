@@ -59,8 +59,14 @@
         <h4 class="m-0">Group {{ g.order | apply: groupName }}</h4>
 
         <ul class="list-none p-0 mb-0">
-          <li *ngFor="let p of g.participants" cdkDrag [cdkDragData]="p">
-            {{ p.name }}
+          <li
+            *ngFor="let p of g.participants"
+            cdkDrag
+            [cdkDragData]="p"
+            class="flex items-center mb-1"
+          >
+            <mat-icon cdkDragHandle fontIcon="drag_handle" class="cursor-move text-sm"></mat-icon>
+            <span>{{ p.name }}</span>
             <span *cdkDragPreview class="block py-1 px-2 bg-slate-300 rounded">{{ p.name }}</span>
           </li>
         </ul>
