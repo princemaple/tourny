@@ -430,6 +430,120 @@ export interface paths {
       };
     };
   };
+  "/match": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.match.id"];
+          group_id?: parameters["rowFilter.match.group_id"];
+          stage_id?: parameters["rowFilter.match.stage_id"];
+          tournament_id?: parameters["rowFilter.match.tournament_id"];
+          left?: parameters["rowFilter.match.left"];
+          right?: parameters["rowFilter.match.right"];
+          games?: parameters["rowFilter.match.games"];
+          result?: parameters["rowFilter.match.result"];
+          created_at?: parameters["rowFilter.match.created_at"];
+          updated_at?: parameters["rowFilter.match.updated_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["match"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** match */
+          match?: definitions["match"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.match.id"];
+          group_id?: parameters["rowFilter.match.group_id"];
+          stage_id?: parameters["rowFilter.match.stage_id"];
+          tournament_id?: parameters["rowFilter.match.tournament_id"];
+          left?: parameters["rowFilter.match.left"];
+          right?: parameters["rowFilter.match.right"];
+          games?: parameters["rowFilter.match.games"];
+          result?: parameters["rowFilter.match.result"];
+          created_at?: parameters["rowFilter.match.created_at"];
+          updated_at?: parameters["rowFilter.match.updated_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.match.id"];
+          group_id?: parameters["rowFilter.match.group_id"];
+          stage_id?: parameters["rowFilter.match.stage_id"];
+          tournament_id?: parameters["rowFilter.match.tournament_id"];
+          left?: parameters["rowFilter.match.left"];
+          right?: parameters["rowFilter.match.right"];
+          games?: parameters["rowFilter.match.games"];
+          result?: parameters["rowFilter.match.result"];
+          created_at?: parameters["rowFilter.match.created_at"];
+          updated_at?: parameters["rowFilter.match.updated_at"];
+        };
+        body: {
+          /** match */
+          match?: definitions["match"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/group": {
     get: {
       parameters: {
@@ -667,6 +781,59 @@ export interface definitions {
      */
     created_at: string;
   };
+  match: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     * @default extensions.uuid_generate_v4()
+     */
+    id: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `group.id`.<fk table='group' column='id'/>
+     */
+    group_id: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `stage.id`.<fk table='stage' column='id'/>
+     */
+    stage_id: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `tournament.id`.<fk table='tournament' column='id'/>
+     */
+    tournament_id: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `participant.id`.<fk table='participant' column='id'/>
+     */
+    left?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `participant.id`.<fk table='participant' column='id'/>
+     */
+    right?: string;
+    /** Format: jsonb */
+    games?: unknown;
+    /** Format: jsonb */
+    result?: unknown;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at: string;
+  };
   group: {
     /**
      * Format: uuid
@@ -806,6 +973,28 @@ export interface parameters {
   "rowFilter.group_participants.order": string;
   /** Format: timestamp with time zone */
   "rowFilter.group_participants.created_at": string;
+  /** @description match */
+  "body.match": definitions["match"];
+  /** Format: uuid */
+  "rowFilter.match.id": string;
+  /** Format: uuid */
+  "rowFilter.match.group_id": string;
+  /** Format: uuid */
+  "rowFilter.match.stage_id": string;
+  /** Format: uuid */
+  "rowFilter.match.tournament_id": string;
+  /** Format: uuid */
+  "rowFilter.match.left": string;
+  /** Format: uuid */
+  "rowFilter.match.right": string;
+  /** Format: jsonb */
+  "rowFilter.match.games": string;
+  /** Format: jsonb */
+  "rowFilter.match.result": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.match.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.match.updated_at": string;
   /** @description group */
   "body.group": definitions["group"];
   /** Format: uuid */
