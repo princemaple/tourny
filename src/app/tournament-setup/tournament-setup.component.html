@@ -1,13 +1,27 @@
 <div class="min-w-[360px] flex flex-col items-stretch px-4">
-  <div class="flex justify-between items-center mb-4 sticky top-0 z-10 bg-white/[0.85] -mx-4 px-2">
+  <header
+    class="flex justify-between items-center mb-4 sticky top-0 z-10 bg-white/[0.85] -mx-4 px-2"
+  >
     <a mat-icon-button routerLink="/dashboard">
       <mat-icon>arrow_back</mat-icon>
     </a>
 
-    <h3>{{ tournament?.name }}</h3>
+    <h3>
+      {{ tournament?.name }}
+      <a mat-icon-button routerLink="/tournaments/{{ tournament?.id }}/edit">
+        <mat-icon fontIcon="edit"></mat-icon>
+      </a>
+    </h3>
 
     <mat-icon [class.animate-pulse]="pending">{{ pending ? 'pending' : 'check_circle' }}</mat-icon>
-  </div>
+  </header>
+
+  <section>
+    <span>{{ tournament?.start_at | date }}</span>
+    <span *ngIf="tournament?.end_at"> - {{ tournament?.end_at | date }}</span>
+
+    <pre class="whitespace-pre-wrap">{{ tournament?.description }}</pre>
+  </section>
 
   <section class="flex flex-col">
     <h4>Tournament Participants</h4>
