@@ -13,7 +13,12 @@
       </a>
     </h3>
 
-    <mat-icon [class.animate-pulse]="pending">{{ pending ? 'pending' : 'check_circle' }}</mat-icon>
+    <mat-icon
+      *ngIf="loading.count | async as c; else check"
+      class="animate-spin"
+      fontIcon="sync"
+    ></mat-icon>
+    <ng-template #check><mat-icon fontIcon="check_circle"></mat-icon></ng-template>
   </header>
 
   <section>

@@ -4,10 +4,11 @@ import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 
 import {maxBy, startCase} from 'lodash-es';
-import {filter, tap} from 'rxjs';
+import {filter} from 'rxjs';
 
 import {definitions} from 'types/supabase';
 import {genRoundRobinMatches} from '../core/gen-matches';
+import {LoadingService} from '../loading.service';
 import {SupaService} from '../supa.service';
 
 type Data = definitions['tournament'] & {
@@ -34,9 +35,12 @@ const StageQuery = `
 export class TournamentSetupComponent {
   tournament: Data | null = null;
 
-  pending = false;
-
-  constructor(private route: ActivatedRoute, private supa: SupaService, private dialog: MatDialog) {
+  constructor(
+    protected loading: LoadingService,
+    private route: ActivatedRoute,
+    private supa: SupaService,
+    private dialog: MatDialog,
+  ) {
     this.route.params.subscribe(({id}) => {
       if (!id) {
         return;
@@ -77,31 +81,22 @@ export class TournamentSetupComponent {
         },
       })
       .afterClosed()
-      .pipe(
-        filter(Boolean),
-        tap(() => {
-          this.pending = true;
-        }),
-      )
+      .pipe(filter(Boolean))
       .subscribe(async ({name}) => {
-        try {
-          const {data, error} = await this.supa.base
-            .from<definitions['participant']>('participant')
-            .insert({
-              name,
-              user_id: this.supa.user!.id,
-              tournament_id: this.tournament!.id,
-            } as definitions['participant'])
-            .single();
+        const {data, error} = await this.supa.base
+          .from<definitions['participant']>('participant')
+          .insert({
+            name,
+            user_id: this.supa.user!.id,
+            tournament_id: this.tournament!.id,
+          } as definitions['participant'])
+          .single();
 
-          if (error) {
-            return alert('failed to add participant...');
-          }
-
-          this.tournament!.participants = [...this.tournament!.participants!, data!];
-        } finally {
-          this.pending = false;
+        if (error) {
+          return alert('failed to add participant...');
         }
+
+        this.tournament!.participants = [...this.tournament!.participants!, data!];
       });
   }
 
