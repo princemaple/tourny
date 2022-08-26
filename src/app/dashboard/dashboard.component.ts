@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
-import {startCase} from 'lodash';
+import {startCase} from 'lodash-es';
 
 import {definitions} from 'types/supabase';
 import {SupaService} from '../supa.service';
