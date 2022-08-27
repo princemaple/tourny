@@ -117,8 +117,11 @@
 
     <div class="flex flex-wrap gap-4 mb-4">
       <div class="p-4 min-w-[20px] bg-slate-200 rounded" *ngFor="let m of s.matches">
-        {{ m.left.name }}<span *ngIf="m.right; else bye"> vs {{ m.right.name }}</span>
+        <span *ngIf="m.left; else tbd">
+          {{ m.left.name }}<span *ngIf="m.right; else bye"> vs {{ m.right.name }}</span>
+        </span>
         <ng-template #bye> gets a BYE!</ng-template>
+        <ng-template #tbd>TBD</ng-template>
       </div>
     </div>
   </ng-container>

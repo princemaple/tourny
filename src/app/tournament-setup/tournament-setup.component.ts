@@ -7,7 +7,7 @@ import {maxBy, startCase} from 'lodash-es';
 import {filter} from 'rxjs';
 
 import {definitions} from 'types/supabase';
-import {genRoundRobinMatches} from '../core/gen-matches';
+import {genMatches} from '../core/gen-matches';
 import {LoadingService} from '../loading.service';
 import {SupaService} from '../supa.service';
 
@@ -242,7 +242,7 @@ export class TournamentSetupComponent {
   async genMatches(s: Data['stages'][number]) {
     await this.supa.base.from<definitions['match']>('match').delete().match({stage_id: s.id});
 
-    const matches = genRoundRobinMatches(s).flat();
+    const matches = genMatches.gen(s).flat();
     await this.supa.base.from<definitions['match']>('match').insert(matches);
 
     this.loadStage(s);

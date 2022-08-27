@@ -1,3 +1,4 @@
+import {chunk} from 'lodash-es';
 import {definitions} from 'types/supabase';
 
 type Stage = definitions['stage'] & {
@@ -34,3 +35,46 @@ export function genRoundRobinMatches(s: Stage) {
     return matches;
   });
 }
+
+export function genEliminationMatches(s: Stage) {
+  return s.groups.map(g => {
+    const matches: definitions['match'][] = [];
+    let count = g.participants.length - (g.participants.length % 2 ? 0 : 1);
+    let index = -1;
+
+    while (count > 0) {
+      matches.push({
+        id: crypto.randomUUID(),
+        tournament_id: s.tournament_id,
+        stage_id: s.id,
+        group_id: g.id,
+        games: [{}],
+        next_match_id: matches[Math.floor(index / 2)]?.id,
+      } as definitions['match']);
+
+      count -= 1;
+      index += 1;
+    }
+
+    const participants = chunk(g.participants, 2);
+    matches.slice(-participants.length).forEach((m, i) => {
+      const [l, r] = participants[i];
+      m.left = l.id;
+      m.right = r?.id;
+    });
+
+    return matches;
+  });
+}
+
+export const genMatches = {
+  map: {
+    round_robin: genRoundRobinMatches,
+    elimination: genEliminationMatches,
+    upper_lower: () => [],
+  },
+
+  gen(s: Stage) {
+    return this.map[s.type](s);
+  },
+};
