@@ -444,6 +444,9 @@ export interface paths {
           result?: parameters["rowFilter.match.result"];
           created_at?: parameters["rowFilter.match.created_at"];
           updated_at?: parameters["rowFilter.match.updated_at"];
+          start_at?: parameters["rowFilter.match.start_at"];
+          end_at?: parameters["rowFilter.match.end_at"];
+          next_match_id?: parameters["rowFilter.match.next_match_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -504,6 +507,9 @@ export interface paths {
           result?: parameters["rowFilter.match.result"];
           created_at?: parameters["rowFilter.match.created_at"];
           updated_at?: parameters["rowFilter.match.updated_at"];
+          start_at?: parameters["rowFilter.match.start_at"];
+          end_at?: parameters["rowFilter.match.end_at"];
+          next_match_id?: parameters["rowFilter.match.next_match_id"];
         };
         header: {
           /** Preference */
@@ -528,6 +534,9 @@ export interface paths {
           result?: parameters["rowFilter.match.result"];
           created_at?: parameters["rowFilter.match.created_at"];
           updated_at?: parameters["rowFilter.match.updated_at"];
+          start_at?: parameters["rowFilter.match.start_at"];
+          end_at?: parameters["rowFilter.match.end_at"];
+          next_match_id?: parameters["rowFilter.match.next_match_id"];
         };
         body: {
           /** match */
@@ -833,6 +842,16 @@ export interface definitions {
      * @default now()
      */
     updated_at: string;
+    /** Format: timestamp with time zone */
+    start_at?: string;
+    /** Format: timestamp with time zone */
+    end_at?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `match.id`.<fk table='match' column='id'/>
+     */
+    next_match_id?: string;
   };
   group: {
     /**
@@ -995,6 +1014,12 @@ export interface parameters {
   "rowFilter.match.created_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.match.updated_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.match.start_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.match.end_at": string;
+  /** Format: uuid */
+  "rowFilter.match.next_match_id": string;
   /** @description group */
   "body.group": definitions["group"];
   /** Format: uuid */
