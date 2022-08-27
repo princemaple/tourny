@@ -217,7 +217,9 @@ export class TournamentSetupComponent {
     this.loadStage(s);
   }
 
-  async resetParticipants(s: Data['stages'][number]) {
+  async clearParticipants(s: Data['stages'][number]) {
+    await this.clearMatches(s);
+
     await this.supa.base
       .from<definitions['group_participants']>('group_participants')
       .delete()
@@ -243,11 +245,15 @@ export class TournamentSetupComponent {
   }
 
   async genMatches(s: Data['stages'][number]) {
-    await this.supa.base.from<definitions['match']>('match').delete().match({stage_id: s.id});
+    await this.clearMatches(s);
 
     const matches = genMatches.gen(s).flat();
     await this.supa.base.from<definitions['match']>('match').insert(matches);
 
     this.loadStage(s);
+  }
+
+  async clearMatches(s: Data['stages'][number]) {
+    await this.supa.base.from<definitions['match']>('match').delete().match({stage_id: s.id});
   }
 }
