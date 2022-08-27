@@ -16,7 +16,10 @@ type Data = definitions['tournament'] & {
     groups: (definitions['group'] & {
       participants: definitions['participant'][];
     })[];
-    matches: {left: {name: string}; right: {name: string} | null}[];
+    matches: (definitions['match'] & {
+      leftP: {name: string} | null;
+      rightP: {name: string} | null;
+    })[];
   })[];
   participants: definitions['participant'][];
 };
@@ -24,7 +27,7 @@ type Data = definitions['tournament'] & {
 const StageQuery = `
   *,
   groups:group(*, participants:participant(id, name)),
-  matches:match(left(name), right(name))
+  matches:match(*, leftP:left(name), rightP:right(name))
 `;
 
 @Component({
