@@ -100,6 +100,47 @@ export class TournamentSetupComponent {
       });
   }
 
+  async loadParticipants() {
+    const fd = await import('../form-dialog/form-dialog.component').then(
+      m => m.FormDialogComponent,
+    );
+
+    this.dialog
+      .open(fd, {
+        data: {
+          fields: [
+            {
+              name: 'text',
+              type: 'textarea',
+              label: 'Participants',
+              placeholder: 'Team Smith\nTeam Jones\n\n<one name per line>',
+            },
+          ],
+        },
+      })
+      .afterClosed()
+      .pipe(filter(Boolean))
+      .subscribe(async ({text}: {text: string}) => {
+        const participants = text
+          .split('\n')
+          .filter(Boolean)
+          .map(name => ({
+            name,
+            user_id: this.supa.user!.id,
+            tournament_id: this.tournament!.id,
+          }));
+        const {data, error} = await this.supa.base
+          .from<definitions['participant']>('participant')
+          .insert(participants as definitions['participant'][]);
+
+        if (error) {
+          return alert('failed to add participants...');
+        }
+
+        this.tournament!.participants = [...this.tournament!.participants!, ...data!];
+      });
+  }
+
   async removeParticipant(p: definitions['participant']) {
     await this.supa.base
       .from('group_participants')

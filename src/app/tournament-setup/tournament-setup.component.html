@@ -54,9 +54,15 @@
       </mat-chip>
     </mat-chip-list>
 
-    <button mat-button color="primary" type="button" (click)="addParticipant()">
-      Add Participant
-    </button>
+    <div class="flex gap-4 justify-center">
+      <button mat-button color="primary" type="button" (click)="addParticipant()">
+        Add Participant
+      </button>
+
+      <button mat-button color="primary" type="button" (click)="loadParticipants()">
+        Load Participants
+      </button>
+    </div>
   </section>
 
   <h4>Tournament Stages</h4>
