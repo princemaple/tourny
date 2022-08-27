@@ -20,6 +20,8 @@ import {AppComponent} from './app.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {TournamentFormComponent} from './tournament-form/tournament-form.component';
 import {TournamentSetupComponent} from './tournament-setup/tournament-setup.component';
+import {MatchNodeComponent} from './match-node/match-node.component';
+import {MatchTreeComponent} from './match-tree/match-tree.component';
 
 import {ApplyPipe} from './utils/apply.pipe';
 import {SortPipe} from './utils/sort.pipe';
@@ -31,9 +33,12 @@ import {ModelArrayModule} from './model-array/model-array.module';
     AppComponent,
     ApplyPipe,
     SortPipe,
+
     DashboardComponent,
     TournamentFormComponent,
     TournamentSetupComponent,
+    MatchNodeComponent,
+    MatchTreeComponent,
   ],
   imports: [
     BrowserModule,

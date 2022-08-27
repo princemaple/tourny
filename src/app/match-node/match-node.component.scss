@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  @apply p-4 min-w-[20px] bg-slate-200 rounded;
+}
+
+:host.child {
+  padding: 1em 1em 0;
+}

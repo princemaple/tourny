@@ -115,14 +115,6 @@
       </mat-card-actions>
     </mat-card>
 
-    <div class="flex flex-wrap gap-4 mb-4">
-      <div class="p-4 min-w-[20px] bg-slate-200 rounded" *ngFor="let m of s.matches">
-        <span *ngIf="m.left; else tbd">
-          {{ m.leftP!.name }}<span *ngIf="m.right; else bye"> vs {{ m.rightP!.name }}</span>
-        </span>
-        <ng-template #bye> gets a BYE!</ng-template>
-        <ng-template #tbd>TBD</ng-template>
-      </div>
-    </div>
+    <tn-match-tree class="mb-4" [matches]="s.matches"></tn-match-tree>
   </ng-container>
 </div>

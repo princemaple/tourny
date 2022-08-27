@@ -1,0 +1,12 @@
+<header class="flex justify-center">
+  <span *ngIf="match.left; else tbd">
+    {{ match.leftP!.name }}<span *ngIf="match.right; else bye"> vs {{ match.rightP!.name }}</span>
+  </span>
+  <ng-template #bye> gets a BYE!</ng-template>
+  <ng-template #tbd><span>TBD</span></ng-template>
+</header>
+
+<section class="flex gap-4 justify-center">
+  <tn-match-node *ngIf="match.leftChild" [match]="match.leftChild"></tn-match-node>
+  <tn-match-node *ngIf="match.rightChild" [match]="match.rightChild"></tn-match-node>
+</section>
