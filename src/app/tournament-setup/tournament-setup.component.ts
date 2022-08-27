@@ -100,7 +100,7 @@ export class TournamentSetupComponent {
       });
   }
 
-  async loadParticipants() {
+  async bulkAddParticipants() {
     const fd = await import('../form-dialog/form-dialog.component').then(
       m => m.FormDialogComponent,
     );
