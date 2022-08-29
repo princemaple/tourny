@@ -241,6 +241,8 @@ export interface paths {
           created_at?: parameters["rowFilter.stage.created_at"];
           updated_at?: parameters["rowFilter.stage.updated_at"];
           type?: parameters["rowFilter.stage.type"];
+          default_best_of?: parameters["rowFilter.stage.default_best_of"];
+          default_winner_count?: parameters["rowFilter.stage.default_winner_count"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Limiting and Pagination */
@@ -297,6 +299,8 @@ export interface paths {
           created_at?: parameters["rowFilter.stage.created_at"];
           updated_at?: parameters["rowFilter.stage.updated_at"];
           type?: parameters["rowFilter.stage.type"];
+          default_best_of?: parameters["rowFilter.stage.default_best_of"];
+          default_winner_count?: parameters["rowFilter.stage.default_winner_count"];
         };
         header: {
           /** Preference */
@@ -319,6 +323,8 @@ export interface paths {
           created_at?: parameters["rowFilter.stage.created_at"];
           updated_at?: parameters["rowFilter.stage.updated_at"];
           type?: parameters["rowFilter.stage.type"];
+          default_best_of?: parameters["rowFilter.stage.default_best_of"];
+          default_winner_count?: parameters["rowFilter.stage.default_winner_count"];
         };
         body: {
           /** stage */
@@ -569,6 +575,7 @@ export interface paths {
           user_id?: parameters["rowFilter.group.user_id"];
           created_at?: parameters["rowFilter.group.created_at"];
           updated_at?: parameters["rowFilter.group.updated_at"];
+          winner_count?: parameters["rowFilter.group.winner_count"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Limiting and Pagination */
@@ -625,6 +632,7 @@ export interface paths {
           user_id?: parameters["rowFilter.group.user_id"];
           created_at?: parameters["rowFilter.group.created_at"];
           updated_at?: parameters["rowFilter.group.updated_at"];
+          winner_count?: parameters["rowFilter.group.winner_count"];
         };
         header: {
           /** Preference */
@@ -647,6 +655,7 @@ export interface paths {
           user_id?: parameters["rowFilter.group.user_id"];
           created_at?: parameters["rowFilter.group.created_at"];
           updated_at?: parameters["rowFilter.group.updated_at"];
+          winner_count?: parameters["rowFilter.group.winner_count"];
         };
         body: {
           /** group */
@@ -766,6 +775,10 @@ export interface definitions {
      * @enum {string}
      */
     type: "round_robin" | "elimination" | "upper_lower";
+    /** Format: smallint */
+    default_best_of: number;
+    /** Format: smallint */
+    default_winner_count: number;
   };
   group_participants: {
     /**
@@ -897,6 +910,8 @@ export interface definitions {
      * @default now()
      */
     updated_at: string;
+    /** Format: smallint */
+    winner_count: number;
   };
 }
 
@@ -987,6 +1002,10 @@ export interface parameters {
   "rowFilter.stage.updated_at": string;
   /** Format: public.stage_types */
   "rowFilter.stage.type": string;
+  /** Format: smallint */
+  "rowFilter.stage.default_best_of": string;
+  /** Format: smallint */
+  "rowFilter.stage.default_winner_count": string;
   /** @description group_participants */
   "body.group_participants": definitions["group_participants"];
   /** Format: uuid */
@@ -1045,6 +1064,8 @@ export interface parameters {
   "rowFilter.group.created_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.group.updated_at": string;
+  /** Format: smallint */
+  "rowFilter.group.winner_count": string;
 }
 
 export interface operations {}
