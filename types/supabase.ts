@@ -447,6 +447,7 @@ export interface paths {
           start_at?: parameters["rowFilter.match.start_at"];
           end_at?: parameters["rowFilter.match.end_at"];
           next_match_id?: parameters["rowFilter.match.next_match_id"];
+          best_of?: parameters["rowFilter.match.best_of"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -510,6 +511,7 @@ export interface paths {
           start_at?: parameters["rowFilter.match.start_at"];
           end_at?: parameters["rowFilter.match.end_at"];
           next_match_id?: parameters["rowFilter.match.next_match_id"];
+          best_of?: parameters["rowFilter.match.best_of"];
         };
         header: {
           /** Preference */
@@ -537,6 +539,7 @@ export interface paths {
           start_at?: parameters["rowFilter.match.start_at"];
           end_at?: parameters["rowFilter.match.end_at"];
           next_match_id?: parameters["rowFilter.match.next_match_id"];
+          best_of?: parameters["rowFilter.match.best_of"];
         };
         body: {
           /** match */
@@ -852,6 +855,8 @@ export interface definitions {
      * This is a Foreign Key to `match.id`.<fk table='match' column='id'/>
      */
     next_match_id?: string;
+    /** Format: smallint */
+    best_of: number;
   };
   group: {
     /**
@@ -1020,6 +1025,8 @@ export interface parameters {
   "rowFilter.match.end_at": string;
   /** Format: uuid */
   "rowFilter.match.next_match_id": string;
+  /** Format: smallint */
+  "rowFilter.match.best_of": string;
   /** @description group */
   "body.group": definitions["group"];
   /** Format: uuid */
