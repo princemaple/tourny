@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  supabaseUrl: 'https://llulsymsupvwhcabnxxl.supabase.co',
+  supabaseUrl: 'http://localhost:54321',
   supabaseKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsdWxzeW1zdXB2d2hjYWJueHhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTkyNTc5NTcsImV4cCI6MTk3NDgzMzk1N30.lyIpTvwNLnp3eANJ2_fuoRQlUtDl5BxSQqJqp6PkmrE',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24ifQ.625_WdcF3KHqz5amU0x2X5WWHP-OEs_4qj0ssLNHzTs',
 };
 
 /*
