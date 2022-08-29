@@ -18,8 +18,8 @@ export class MatchTreeComponent implements OnChanges {
       this.groups = Object.values(
         groupBy(changes['matches'].currentValue as MatchNode[], 'group_id'),
       ).map(group => {
+        const lookup = new Map(group.map(m => [m.id, m]));
         const roots = group.filter(m => !m.next_match_id);
-        const lookup = new Map(roots.map(m => [m.id, m]));
         const descendents = group.filter(m => m.next_match_id);
 
         descendents.forEach(m => {
@@ -29,7 +29,6 @@ export class MatchTreeComponent implements OnChanges {
           } else {
             parent.rightChild = m;
           }
-          lookup.set(m.id, m);
         });
 
         return roots;
