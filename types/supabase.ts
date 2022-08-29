@@ -20,7 +20,6 @@ export interface paths {
           name?: parameters["rowFilter.tournament.name"];
           description?: parameters["rowFilter.tournament.description"];
           meta?: parameters["rowFilter.tournament.meta"];
-          result?: parameters["rowFilter.tournament.result"];
           user_id?: parameters["rowFilter.tournament.user_id"];
           created_at?: parameters["rowFilter.tournament.created_at"];
           updated_at?: parameters["rowFilter.tournament.updated_at"];
@@ -80,7 +79,6 @@ export interface paths {
           name?: parameters["rowFilter.tournament.name"];
           description?: parameters["rowFilter.tournament.description"];
           meta?: parameters["rowFilter.tournament.meta"];
-          result?: parameters["rowFilter.tournament.result"];
           user_id?: parameters["rowFilter.tournament.user_id"];
           created_at?: parameters["rowFilter.tournament.created_at"];
           updated_at?: parameters["rowFilter.tournament.updated_at"];
@@ -104,7 +102,6 @@ export interface paths {
           name?: parameters["rowFilter.tournament.name"];
           description?: parameters["rowFilter.tournament.description"];
           meta?: parameters["rowFilter.tournament.meta"];
-          result?: parameters["rowFilter.tournament.result"];
           user_id?: parameters["rowFilter.tournament.user_id"];
           created_at?: parameters["rowFilter.tournament.created_at"];
           updated_at?: parameters["rowFilter.tournament.updated_at"];
@@ -689,8 +686,6 @@ export interface definitions {
     description?: string;
     /** Format: jsonb */
     meta: unknown;
-    /** Format: jsonb */
-    result?: unknown;
     /** Format: uuid */
     user_id: string;
     /**
@@ -958,8 +953,6 @@ export interface parameters {
   "rowFilter.tournament.description": string;
   /** Format: jsonb */
   "rowFilter.tournament.meta": string;
-  /** Format: jsonb */
-  "rowFilter.tournament.result": string;
   /** Format: uuid */
   "rowFilter.tournament.user_id": string;
   /** Format: timestamp with time zone */
