@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   async ngOnInit() {
     this.tournaments = await this.supa.base
       .from<Data>('tournament')
-      .select(`id, name, description, start_at, end_at, meta, result, stage (id, name, type)`)
+      .select(`id, name, description, start_at, end_at, meta, stage (id, name, type)`)
       .then(({data}) => data ?? []);
   }
 
