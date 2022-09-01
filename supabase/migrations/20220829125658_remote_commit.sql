@@ -465,28 +465,28 @@ CREATE POLICY "Enable delete for tournament creator" ON "public"."match" FOR DEL
 -- Name: group Enable delete for users based on user_id; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Enable delete for users based on user_id" ON "public"."group" FOR DELETE USING (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable delete for users based on user_id" ON "public"."group" FOR DELETE TO "authenticated" USING (("auth"."uid"() = "user_id"));
 
 
 --
 -- Name: participant Enable delete for users based on user_id; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Enable delete for users based on user_id" ON "public"."participant" FOR DELETE USING (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable delete for users based on user_id" ON "public"."participant" FOR DELETE TO "authenticated" USING (("auth"."uid"() = "user_id"));
 
 
 --
 -- Name: stage Enable delete for users based on user_id; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Enable delete for users based on user_id" ON "public"."stage" FOR DELETE USING (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable delete for users based on user_id" ON "public"."stage" FOR DELETE TO "authenticated" USING (("auth"."uid"() = "user_id"));
 
 
 --
 -- Name: tournament Enable delete for users based on user_id; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Enable delete for users based on user_id" ON "public"."tournament" FOR DELETE USING (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable delete for users based on user_id" ON "public"."tournament" FOR DELETE TO "authenticated" USING (("auth"."uid"() = "user_id"));
 
 
 --
@@ -588,7 +588,7 @@ CREATE POLICY "Enable read access for all users" ON "public"."tournament" FOR SE
 -- Name: group_participants Enable update for tournament creator; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Enable update for tournament creator" ON "public"."group_participants" FOR UPDATE USING (("auth"."uid"() IN ( SELECT "tournament"."user_id"
+CREATE POLICY "Enable update for tournament creator" ON "public"."group_participants" FOR UPDATE TO "authenticated" USING (("auth"."uid"() IN ( SELECT "tournament"."user_id"
    FROM ("public"."tournament"
      JOIN "public"."group" ON (("tournament"."id" = "group"."tournament_id")))
   WHERE ("group"."id" = "group_participants"."group_id")))) WITH CHECK (true);
@@ -614,21 +614,21 @@ CREATE POLICY "Enable update for user that created it" ON "public"."tournament" 
 -- Name: group Enable update for users based on user_id; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Enable update for users based on user_id" ON "public"."group" FOR UPDATE USING (("auth"."uid"() = "user_id")) WITH CHECK (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable update for users based on user_id" ON "public"."group" FOR UPDATE TO "authenticated" USING (("auth"."uid"() = "user_id")) WITH CHECK (("auth"."uid"() = "user_id"));
 
 
 --
 -- Name: participant Enable update for users based on user_id; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Enable update for users based on user_id" ON "public"."participant" FOR UPDATE USING (("auth"."uid"() = "user_id")) WITH CHECK (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable update for users based on user_id" ON "public"."participant" FOR UPDATE TO "authenticated" USING (("auth"."uid"() = "user_id")) WITH CHECK (("auth"."uid"() = "user_id"));
 
 
 --
 -- Name: stage Enable update for users based on user_id; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Enable update for users based on user_id" ON "public"."stage" FOR UPDATE USING (("auth"."uid"() = "user_id")) WITH CHECK (("auth"."uid"() = "user_id"));
+CREATE POLICY "Enable update for users based on user_id" ON "public"."stage" FOR UPDATE TO "authenticated" USING (("auth"."uid"() = "user_id")) WITH CHECK (("auth"."uid"() = "user_id"));
 
 
 --
