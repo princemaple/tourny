@@ -1,7 +1,7 @@
-import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {Component} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
 
 import {maxBy, startCase} from 'lodash-es';
 import {filter} from 'rxjs';

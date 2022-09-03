@@ -124,6 +124,6 @@
       </mat-card-actions>
     </mat-card>
 
-    <tn-match-tree [matches]="s.matches"></tn-match-tree>
+    <tn-match-tree [groups]="s.groups" [matches]="$any(s.matches)"></tn-match-tree>
   </ng-container>
 </div>
