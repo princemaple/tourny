@@ -1,5 +1,5 @@
-<ng-container *ngFor="let group of matchGroups | keyvalue">
-  <h5 class="my-2">Group {{ group.key }}</h5>
+<ng-container *ngFor="let group of matchGroups | keyvalue; count as groupCount">
+  <h5 *ngIf="groupCount > 1" class="my-2">Group {{ group.key }}</h5>
   <section class="flex flex-wrap gap-4 mb-4">
     <tn-match-node *ngFor="let match of group.value" [match]="match"></tn-match-node>
   </section>
