@@ -85,7 +85,13 @@
     </mat-form-field>
   </ng-container>
 
-  <ng-container *ngTemplateOutlet="data.otherFields; injector: injector"></ng-container>
+  <ng-container
+    *ngTemplateOutlet="
+      data.otherFields;
+      context: {$implicit: data.otherContext};
+      injector: injector
+    "
+  ></ng-container>
 </form>
 
 <div mat-dialog-actions>

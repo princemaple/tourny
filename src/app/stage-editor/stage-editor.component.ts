@@ -1,12 +1,15 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, TemplateRef} from '@angular/core';
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import {MatDialog} from '@angular/material/dialog';
 
+import {filter} from 'rxjs';
 import {startCase} from 'lodash-es';
 
 import {definitions} from 'types/supabase';
 import {GenMatches} from '../core/gen-matches';
 import {SupaService} from '../supa.service';
 import {Data as Tournament} from '../tournament-setup/tournament-setup.component';
+import {FormDialogComponent} from '../form-dialog/form-dialog.component';
 
 type Stage = Tournament['stages'][number];
 
@@ -22,7 +25,7 @@ export class StageEditorComponent {
 
   @Output() change = new EventEmitter<Stage>();
 
-  constructor(private supa: SupaService) {}
+  constructor(private supa: SupaService, private dialog: MatDialog) {}
 
   casing = startCase;
   groupName = (n: number) => String.fromCharCode('A'.charCodeAt(0) + n);
@@ -123,5 +126,24 @@ export class StageEditorComponent {
 
   async clearMatches(s: Stage) {
     await this.supa.base.from<definitions['match']>('match').delete().match({stage_id: s.id});
+  }
+
+  editGroup(g: Stage['groups'][number], template: TemplateRef<any>) {
+    this.dialog
+      .open(FormDialogComponent, {data: {otherFields: template, otherContext: g}})
+      .afterClosed()
+      .pipe(filter(Boolean))
+      .subscribe(async data => {
+        const {error} = await this.supa.base
+          .from<definitions['group']>('group')
+          .update(data)
+          .eq('id', g.id);
+
+        if (error) {
+          alert('Failed to update group.');
+        }
+
+        this.change.emit(this.stage);
+      });
   }
 }

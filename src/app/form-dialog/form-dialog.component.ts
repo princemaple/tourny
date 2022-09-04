@@ -27,6 +27,7 @@ export type TemplateData = {
   title: string;
   fields: Field[];
   otherFields: TemplateRef<any>;
+  otherContext: any;
   submitText?: string;
   cancelText?: string;
 };
