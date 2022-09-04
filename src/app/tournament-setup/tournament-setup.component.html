@@ -139,6 +139,6 @@
 
 <mat-menu #menu>
   <ng-template matMenuContent let-group let-stage="stage">
-    <button mat-menu-item (click)="dropGroup(stage, group)">Remove Group</button>
+    <button mat-menu-item (click)="dropGroup(stage, group)">Remove Group {{ group.name }}</button>
   </ng-template>
 </mat-menu>
