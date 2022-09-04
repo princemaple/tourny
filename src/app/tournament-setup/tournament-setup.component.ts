@@ -232,14 +232,21 @@ export class TournamentSetupComponent {
     this.loadStage(s);
   }
 
-  async dropGroup(s: Data['stages'][number]) {
+  async dropGroup(s: Data['stages'][number], group: Data['stages'][number]['groups'][number]) {
+    await this.clearMatches(s);
+
+    await this.supa.base
+      .from<definitions['group_participants']>('group_participants')
+      .delete()
+      .eq('group_id', group.id);
+
     const {error} = await this.supa.base
       .from<definitions['group']>('group')
       .delete()
-      .eq('id', maxBy(s.groups, 'order')!.id);
+      .eq('id', group.id);
 
     if (error) {
-      alert('Failed to remove the group at the and. Does it still have participants in it?');
+      alert('Failed to remove the group.');
     }
 
     this.loadStage(s);

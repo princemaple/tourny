@@ -76,12 +76,22 @@
       </mat-card-subtitle>
       <mat-card-content class="!flex gap-4">
         <div
-          class="p-4 min-w-[20px] bg-slate-200 rounded"
+          class="relative p-4 min-w-[20px] bg-slate-200 rounded"
           *ngFor="let g of s.groups"
           cdkDropList
           [cdkDropListData]="g"
           (cdkDropListDropped)="changeGroup($event, s)"
         >
+          <button
+            class="!absolute right-0 top-0 translate-x-1/4 -translate-y-1/4 bg-red-100/50 transition hover:bg-red-100"
+            mat-icon-button
+            color="primary"
+            [matMenuTriggerFor]="menu"
+            [matMenuTriggerData]="{$implicit: g, stage: s}"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
           <h4 class="m-0">Group {{ g.order | apply: groupName }}</h4>
 
           <ul class="list-none p-0 mb-0 columns-2">
@@ -119,7 +129,6 @@
           Fill participants
         </button>
         <button mat-button (click)="clearParticipants(s)">Clear Participants</button>
-        <button mat-button (click)="dropGroup(s)">Drop a group</button>
         <button mat-button (click)="genMatches(s)">GEN</button>
       </mat-card-actions>
     </mat-card>
@@ -127,3 +136,9 @@
     <tn-match-tree [groups]="s.groups" [matches]="$any(s.matches)"></tn-match-tree>
   </ng-container>
 </div>
+
+<mat-menu #menu>
+  <ng-template matMenuContent let-group let-stage="stage">
+    <button mat-menu-item (click)="dropGroup(stage, group)">Remove Group</button>
+  </ng-template>
+</mat-menu>
