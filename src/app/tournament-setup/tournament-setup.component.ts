@@ -7,7 +7,7 @@ import {maxBy, startCase} from 'lodash-es';
 import {filter} from 'rxjs';
 
 import {definitions} from 'types/supabase';
-import {genMatches} from '../core/gen-matches';
+import {GenMatches} from '../core/gen-matches';
 import {LoadingService} from '../loading.service';
 import {SupaService} from '../supa.service';
 
@@ -162,6 +162,7 @@ export class TournamentSetupComponent {
         stage_id: s.id,
         order: s.groups.length,
         name: this.groupName(s.groups.length),
+        winner_count: s.default_winner_count,
       } as definitions['group'])
       .single();
 
@@ -247,7 +248,7 @@ export class TournamentSetupComponent {
   async genMatches(s: Data['stages'][number]) {
     await this.clearMatches(s);
 
-    const matches = genMatches.gen(s).flat();
+    const matches = GenMatches.gen(s).flat();
     await this.supa.base.from<definitions['match']>('match').insert(matches);
 
     this.loadStage(s);

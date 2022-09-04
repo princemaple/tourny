@@ -7,6 +7,10 @@ type Stage = definitions['stage'] & {
   })[];
 };
 
+function genN(n: number) {
+  return new Array(n).fill({});
+}
+
 export function genRoundRobinMatches(s: Stage) {
   return s.groups.map(g => {
     const matches: definitions['match'][] = [];
@@ -25,7 +29,7 @@ export function genRoundRobinMatches(s: Stage) {
           group_id: g.id,
           left: left!.id,
           right: right?.id,
-          games: [{}],
+          games: genN(s.default_best_of),
         } as definitions['match']);
       }
 
@@ -48,7 +52,7 @@ export function genEliminationMatches(s: Stage) {
         tournament_id: s.tournament_id,
         stage_id: s.id,
         group_id: g.id,
-        games: [{}],
+        games: genN(s.default_best_of),
         next_match_id: matches[Math.floor(index / 2)]?.id,
       } as definitions['match']);
 
@@ -67,7 +71,7 @@ export function genEliminationMatches(s: Stage) {
   });
 }
 
-export const genMatches = {
+export const GenMatches = {
   map: {
     round_robin: genRoundRobinMatches,
     elimination: genEliminationMatches,
