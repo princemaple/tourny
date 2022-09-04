@@ -1,17 +1,14 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {CdkDragDrop} from '@angular/cdk/drag-drop';
 
-import {startCase} from 'lodash-es';
 import {filter} from 'rxjs';
 
 import {definitions} from 'types/supabase';
-import {GenMatches} from '../core/gen-matches';
 import {LoadingService} from '../loading.service';
 import {SupaService} from '../supa.service';
 
-type Data = definitions['tournament'] & {
+export type Data = definitions['tournament'] & {
   stages: (definitions['stage'] & {
     groups: (definitions['group'] & {
       participants: definitions['participant'][];
@@ -52,9 +49,6 @@ export class TournamentSetupComponent {
       this.loadTournament(id);
     });
   }
-
-  casing = startCase;
-  groupName = (n: number) => String.fromCharCode('A'.charCodeAt(0) + n);
 
   async loadTournament(id: string) {
     const {data} = await this.supa.base
@@ -153,41 +147,6 @@ export class TournamentSetupComponent {
     this.loadTournament(p.tournament_id);
   }
 
-  async addGroup(s: Exclude<Data['stages'], undefined>[number]) {
-    const {data: group, error} = await this.supa.base
-      .from<definitions['group']>('group')
-      .insert({
-        user_id: this.supa.user!.id,
-        tournament_id: this.tournament!.id,
-        stage_id: s.id,
-        order: s.groups.length,
-        name: this.groupName(s.groups.length),
-        winner_count: s.default_winner_count,
-      } as definitions['group'])
-      .single();
-
-    if (!error) {
-      s.groups = [...s.groups!, {...group, participants: []}] as any;
-    }
-  }
-
-  async fillParticipants(s: Data['stages'][number]) {
-    const groupParticipants = this.tournament!.participants!.map((p, i) => {
-      const g = s.groups[i % s.groups.length];
-      return {group_id: g.id, participant_id: p.id, order: Math.floor(i / s.groups.length)};
-    });
-
-    const insertGroupParticipants = await this.supa.base
-      .from<definitions['group_participants']>('group_participants')
-      .upsert(groupParticipants);
-
-    if (insertGroupParticipants.error) {
-      return alert(`Failed to fill participants into groups!`);
-    }
-
-    this.loadStage(s);
-  }
-
   async loadStage(s: definitions['stage']) {
     const loadStage = await this.supa.base
       .from<Exclude<Data['stages'], undefined>[number]>('stage')
@@ -200,68 +159,5 @@ export class TournamentSetupComponent {
     } else {
       Object.assign(s, loadStage.data);
     }
-  }
-
-  async changeGroup(
-    event: CdkDragDrop<
-      Data['stages'][number]['groups'][number],
-      Data['stages'][number]['groups'][number],
-      definitions['participant']
-    >,
-    s: definitions['stage'],
-  ) {
-    await this.supa.base
-      .from<definitions['group_participants']>('group_participants')
-      .update({group_id: event.container.data.id})
-      .match({group_id: event.previousContainer.data.id, participant_id: event.item.data.id});
-
-    this.loadStage(s);
-  }
-
-  async clearParticipants(s: Data['stages'][number]) {
-    await this.clearMatches(s);
-
-    await this.supa.base
-      .from<definitions['group_participants']>('group_participants')
-      .delete()
-      .in(
-        'group_id',
-        s.groups.map(g => g.id),
-      );
-
-    this.loadStage(s);
-  }
-
-  async dropGroup(s: Data['stages'][number], group: Data['stages'][number]['groups'][number]) {
-    await this.clearMatches(s);
-
-    await this.supa.base
-      .from<definitions['group_participants']>('group_participants')
-      .delete()
-      .eq('group_id', group.id);
-
-    const {error} = await this.supa.base
-      .from<definitions['group']>('group')
-      .delete()
-      .eq('id', group.id);
-
-    if (error) {
-      alert('Failed to remove the group.');
-    }
-
-    this.loadStage(s);
-  }
-
-  async genMatches(s: Data['stages'][number]) {
-    await this.clearMatches(s);
-
-    const matches = GenMatches.gen(s).flat();
-    await this.supa.base.from<definitions['match']>('match').insert(matches);
-
-    this.loadStage(s);
-  }
-
-  async clearMatches(s: Data['stages'][number]) {
-    await this.supa.base.from<definitions['match']>('match').delete().match({stage_id: s.id});
   }
 }

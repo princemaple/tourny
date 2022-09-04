@@ -67,78 +67,12 @@
 
   <h4>Tournament Stages</h4>
 
-  <ng-container *ngFor="let s of tournament?.stages; index as i">
-    <mat-card class="mb-4" cdkDropListGroup>
-      <mat-card-title>{{ s.name }}</mat-card-title>
-      <mat-card-subtitle>
-        <span>{{ s.type | apply: casing }}</span>
-        <span *ngIf="s.groups.length as count">, Group count: {{ count }}</span>
-      </mat-card-subtitle>
-      <mat-card-content class="!flex gap-4">
-        <div
-          class="relative p-4 min-w-[20px] bg-slate-200 rounded"
-          *ngFor="let g of s.groups"
-          cdkDropList
-          [cdkDropListData]="g"
-          (cdkDropListDropped)="changeGroup($event, s)"
-        >
-          <button
-            class="!absolute right-0 top-0 translate-x-1/4 -translate-y-1/4 bg-red-100/50 transition hover:bg-red-100"
-            mat-icon-button
-            color="primary"
-            [matMenuTriggerFor]="menu"
-            [matMenuTriggerData]="{$implicit: g, stage: s}"
-          >
-            <mat-icon>more_vert</mat-icon>
-          </button>
-
-          <h4 class="m-0">Group {{ g.order | apply: groupName }}</h4>
-
-          <ul class="list-none p-0 mb-0 columns-2">
-            <li
-              *ngFor="let p of g.participants"
-              cdkDrag
-              [cdkDragData]="p"
-              [cdkDragDisabled]="s.groups.length < 2"
-              class="flex items-center mb-1"
-            >
-              <mat-icon
-                *ngIf="s.groups.length >= 2; else item"
-                cdkDragHandle
-                fontIcon="drag_handle"
-                class="cursor-move text-sm"
-              ></mat-icon>
-              <ng-template #item>
-                <mat-icon class="text-sm" fontIcon="remove"></mat-icon>
-              </ng-template>
-              <span>{{ p.name }}</span>
-              <span *cdkDragPreview class="block py-1 px-2 bg-slate-300 rounded">{{ p.name }}</span>
-            </li>
-          </ul>
-        </div>
-      </mat-card-content>
-
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="addGroup(s)">Add Group</button>
-        <button
-          *ngIf="s.groups.length && i === 0"
-          mat-button
-          color="primary"
-          (click)="fillParticipants(s)"
-        >
-          Fill participants
-        </button>
-        <button mat-button (click)="clearParticipants(s)">Clear Participants</button>
-        <button mat-button (click)="genMatches(s)">GEN</button>
-      </mat-card-actions>
-    </mat-card>
-
-    <tn-match-tree [groups]="s.groups" [matches]="$any(s.matches)"></tn-match-tree>
+  <ng-container *ngFor="let stage of tournament?.stages; index as i">
+    <tn-stage-editor
+      [tournament]="tournament!"
+      [stage]="stage"
+      [index]="i"
+      (change)="loadStage($event)"
+    ></tn-stage-editor>
   </ng-container>
 </div>
-
-<mat-menu #menu>
-  <ng-template matMenuContent let-group let-stage="stage">
-    <button mat-menu-item (click)="dropGroup(stage, group)">Remove Group {{ group.name }}</button>
-  </ng-template>
-</mat-menu>
