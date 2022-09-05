@@ -15,6 +15,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -61,6 +62,7 @@ import {ModelArrayModule} from './model-array/model-array.module';
     MatSelectModule,
     MatDialogModule,
     MatMenuModule,
+    MatTooltipModule,
 
     KeyValueFieldModule,
     ModelArrayModule,

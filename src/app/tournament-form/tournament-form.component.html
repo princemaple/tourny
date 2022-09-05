@@ -64,6 +64,16 @@
             <mat-option value="upper_lower">Upper-Lower Brackets</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field
+          appearance="standard"
+          class="w-[64px]"
+          matTooltip="Default, can change per match"
+          matTooltipPosition="right"
+        >
+          <mat-label>Best Of</mat-label>
+          <input matInput type="number" min="1" [(ngModel)]="stage.default_best_of" required />
+        </mat-form-field>
       </mat-card-content>
     </mat-card>
   </model-array>
