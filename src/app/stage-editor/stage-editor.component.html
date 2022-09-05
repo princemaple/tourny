@@ -67,15 +67,17 @@
 
 <mat-menu #menu>
   <ng-template matMenuContent let-group let-stage="stage">
-    <button mat-menu-item (click)="editGroup(group, editGroupForm)">Edit {{ group.name }}</button>
+    <button mat-menu-item (click)="editGroup(stage, group, editGroupForm)">
+      Edit {{ group.name }}
+    </button>
     <button mat-menu-item (click)="dropGroup(stage, group)">Remove {{ group.name }}</button>
   </ng-template>
 </mat-menu>
 
-<ng-template #editGroupForm let-params>
+<ng-template #editGroupForm let-group let-stage="stage">
   <mat-form-field appearance="fill">
     <mat-label>Group Name</mat-label>
-    <input matInput [ngModel]="params.name" name="name" required />
+    <input matInput [ngModel]="group.name" name="name" required />
   </mat-form-field>
 
   <mat-form-field appearance="fill">
@@ -84,9 +86,10 @@
       matInput
       type="number"
       min="0"
-      [ngModel]="params.winner_count"
+      [ngModel]="group.winner_count"
       name="winner_count"
       required
+      [disabled]="stage.type != 'round_robin'"
     />
     <span matSuffix>To Win</span>
   </mat-form-field>

@@ -58,6 +58,8 @@ export class TournamentFormComponent {
       type: 'round_robin',
       user_id: this.supa.user!.id,
       order: array ? array.items.value.length : 0,
+      default_best_of: 1,
+      default_winner_count: 1,
     };
   }
 }

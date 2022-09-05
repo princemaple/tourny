@@ -128,9 +128,11 @@ export class StageEditorComponent {
     await this.supa.base.from<definitions['match']>('match').delete().match({stage_id: s.id});
   }
 
-  editGroup(g: Stage['groups'][number], template: TemplateRef<any>) {
+  editGroup(s: Stage, g: Stage['groups'][number], template: TemplateRef<any>) {
     this.dialog
-      .open(FormDialogComponent, {data: {otherFields: template, otherContext: g}})
+      .open(FormDialogComponent, {
+        data: {otherFields: template, otherContext: {$implicit: g, stage: s}},
+      })
       .afterClosed()
       .pipe(filter(Boolean))
       .subscribe(async data => {

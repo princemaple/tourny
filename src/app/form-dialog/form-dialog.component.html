@@ -86,11 +86,7 @@
   </ng-container>
 
   <ng-container
-    *ngTemplateOutlet="
-      data.otherFields;
-      context: {$implicit: data.otherContext};
-      injector: injector
-    "
+    *ngTemplateOutlet="data.otherFields; context: data.otherContext; injector: injector"
   ></ng-container>
 </form>
 
