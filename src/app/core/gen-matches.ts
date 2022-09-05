@@ -14,9 +14,10 @@ function genN(n: number) {
 export function genRoundRobinMatches(s: Stage) {
   return s.groups.map(g => {
     const matches: definitions['match'][] = [];
-    const [p1, ...rest] = g.participants;
+    const odd = g.participants.length % 2;
+    let [p1, ...rest] = g.participants;
 
-    for (let _ of new Array(rest.length)) {
+    for (let _ of new Array(odd ? g.participants.length : rest.length)) {
       const list = [p1, ...rest];
 
       while (list.length) {
@@ -33,7 +34,12 @@ export function genRoundRobinMatches(s: Stage) {
         } as definitions['match']);
       }
 
-      rest.unshift(rest.pop()!);
+      if (odd) {
+        rest.push(p1);
+        p1 = rest.shift()!;
+      } else {
+        rest.unshift(rest.pop()!);
+      }
     }
 
     return matches;
