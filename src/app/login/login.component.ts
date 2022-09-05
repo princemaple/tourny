@@ -59,8 +59,8 @@ export class LoginComponent {
   async handleLogin(email: string) {
     try {
       this.loading = true;
-      const login = await this.supa.signIn(email);
-      if (login.error) {
+      const {error} = await this.supa.signIn(email);
+      if (error) {
         alert(`It seems that you don't have the permission to login!`);
       } else {
         alert('Check your email for the login link!');
