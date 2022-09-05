@@ -1,14 +1,33 @@
-<div class="flex justify-center">
+<div class="flex flex-col items-center gap-4">
   <form class="w-50" #f="ngForm" (ngSubmit)="handleLogin(f.value.email)">
-    <p class="description">Sign in via magic link with your email below</p>
-    <mat-form-field>
-      <mat-label>Email</mat-label>
-      <input type="email" matInput ngModel name="email" placeholder="user@company.co" />
-    </mat-form-field>
-    <div>
-      <button type="submit" color="primary" mat-raised-button [disabled]="loading">
+    <p>Sign-in via Magic Link?</p>
+
+    <div class="flex gap-4 items-center">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          type="email"
+          email
+          matInput
+          ngModel
+          name="email"
+          placeholder="user@company.co"
+          required
+        />
+      </mat-form-field>
+
+      <button type="submit" color="primary" mat-raised-button [disabled]="loading || f.invalid">
         {{ loading ? 'Sending Magic Link...' : 'Send Magic Link' }}
       </button>
     </div>
   </form>
+
+  <mat-divider class="w-full"></mat-divider>
+
+  <div class="self-stretch px-4 py-2 rounded bg-slate-200">
+    Or sign-in with:
+    <button mat-icon-button (click)="oauth()">
+      <mat-icon svgIcon="github"></mat-icon>
+    </button>
+  </div>
 </div>
