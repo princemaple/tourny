@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter, TemplateRef} from '@angular/core';
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 
 import {filter} from 'rxjs';
 import {startCase} from 'lodash-es';
