@@ -8,7 +8,7 @@ import {definitions} from 'types/supabase';
 import {LoadingService} from '../loading.service';
 import {SupaService} from '../supa.service';
 
-export type Data = definitions['tournament'] & {
+export type Data = Partial<definitions['tournament']> & {
   stages: (definitions['stage'] & {
     groups: (definitions['group'] & {
       participants: definitions['participant'][];
@@ -52,7 +52,7 @@ export class TournamentSetupComponent {
 
   async loadTournament(id: string) {
     const {data} = await this.supa.base
-      .from<Data>('tournament')
+      .from('tournament')
       .select(
         `
           id, name, description, start_at, end_at, meta,
@@ -81,12 +81,13 @@ export class TournamentSetupComponent {
       .pipe(filter(Boolean))
       .subscribe(async ({name}) => {
         const {data, error} = await this.supa.base
-          .from<definitions['participant']>('participant')
+          .from('participant')
           .insert({
             name,
             user_id: this.supa.user!.id,
             tournament_id: this.tournament!.id,
           } as definitions['participant'])
+          .select()
           .single();
 
         if (error) {
@@ -127,8 +128,9 @@ export class TournamentSetupComponent {
             tournament_id: this.tournament!.id,
           }));
         const {data, error} = await this.supa.base
-          .from<definitions['participant']>('participant')
-          .insert(participants as definitions['participant'][]);
+          .from('participant')
+          .insert(participants as definitions['participant'][])
+          .select();
 
         if (error) {
           return alert('failed to add participants...');
@@ -148,11 +150,7 @@ export class TournamentSetupComponent {
   }
 
   async loadStage(s: definitions['stage']) {
-    const loadStage = await this.supa.base
-      .from<Exclude<Data['stages'], undefined>[number]>('stage')
-      .select(StageQuery)
-      .eq('id', s.id)
-      .single();
+    const loadStage = await this.supa.base.from('stage').select(StageQuery).eq('id', s.id).single();
 
     if (loadStage.error) {
       alert('Failed to refresh stage data!');

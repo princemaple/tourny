@@ -5,7 +5,7 @@ import {startCase} from 'lodash-es';
 import {definitions} from 'types/supabase';
 import {SupaService} from '../supa.service';
 
-type Data = definitions['tournament'] & {stage: definitions['stage'][]};
+type Data = Partial<definitions['tournament']> & {stage: definitions['stage'][]};
 
 @Component({
   selector: 'tn-dashboard',
@@ -19,8 +19,8 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit() {
     this.tournaments = await this.supa.base
-      .from<Data>('tournament')
-      .select(`id, name, description, start_at, end_at, meta, stage (id, name, type)`)
+      .from('tournament')
+      .select(`id, name, description, start_at, end_at, meta, stage (*)`)
       .eq('user_id', this.supa.user!.id)
       .then(({data}) => data ?? []);
   }

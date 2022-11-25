@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {AuthChangeEvent, createClient, Session, SupabaseClient} from '@supabase/supabase-js';
+import {createClient, SupabaseClient, User} from '@supabase/supabase-js';
 import {fetch} from 'cross-fetch';
 
 import {environment} from '../environments/environment';
@@ -10,36 +10,25 @@ import {LoadingService} from './loading.service';
 export class SupaService {
   readonly base: SupabaseClient;
 
+  user: User | null = null;
+
   constructor(loading: LoadingService) {
     this.base = createClient(environment.supabaseUrl, environment.supabaseKey, {
-      fetch: async (...args) => {
-        loading.inc();
-        try {
-          return await fetch(...args);
-        } finally {
-          loading.dec();
-        }
+      db: {
+        schema: 'public',
+      },
+
+      auth: {
+        persistSession: true,
+      },
+      global: {
+        fetch: async (...args) => {
+          loading.inc();
+          return fetch(...args).finally(() => {
+            loading.dec();
+          });
+        },
       },
     });
-  }
-
-  get user() {
-    return this.base.auth.user();
-  }
-
-  get session() {
-    return this.base.auth.session();
-  }
-
-  authChanges(callback: (event: AuthChangeEvent, session: Session | null) => void) {
-    return this.base.auth.onAuthStateChange(callback);
-  }
-
-  signIn(email: string) {
-    return this.base.auth.signIn({email});
-  }
-
-  signOut() {
-    return this.base.auth.signOut();
   }
 }

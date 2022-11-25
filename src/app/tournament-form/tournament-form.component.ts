@@ -24,7 +24,7 @@ export class TournamentFormComponent {
       }
 
       const {data} = await supa.base
-        .from<Data>('tournament')
+        .from('tournament')
         .select('id, name, description, start_at, end_at, meta, stage (*)')
         .eq('id', id)
         .single();
@@ -36,17 +36,20 @@ export class TournamentFormComponent {
   async submit(f: NgForm) {
     const {stage, ...fields} = f.value;
     const {error, data} = await this.supa.base
-      .from<definitions['tournament']>('tournament')
-      .upsert({...fields, user_id: this.supa.user!.id, id: this.params.id})
+      .from('tournament')
+      .upsert({
+        ...fields,
+        user_id: this.supa.user!.id,
+        id: this.params.id,
+      })
+      .select()
       .single();
 
     if (error) {
       alert('An error occurred, please try again or report the error. Thank you!');
     } else {
       for (let s of stage as definitions['stage'][]) {
-        await this.supa.base
-          .from<definitions['stage']>('stage')
-          .upsert({...s, tournament_id: data!.id});
+        await this.supa.base.from('stage').upsert({...s, tournament_id: data!.id});
       }
       this.router.navigateByUrl('dashboard');
     }

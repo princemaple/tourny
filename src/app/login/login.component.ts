@@ -1,5 +1,4 @@
 import {Component, Injectable} from '@angular/core';
-import {Router} from '@angular/router';
 import {DomSanitizer} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 
@@ -10,6 +9,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatDividerModule} from '@angular/material/divider';
 
 import {SupaService} from '../supa.service';
+import {Router} from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 class AddIcons {
@@ -42,24 +42,18 @@ class AddIcons {
   ],
 })
 export class LoginComponent {
-  loading = false;
+  sending = false;
 
-  constructor(router: Router, private supa: SupaService, public addIcons: AddIcons) {
-    if (supa.session) {
-      router.navigateByUrl('dashboard');
+  constructor(private router: Router, private supa: SupaService, protected addIcons: AddIcons) {
+    if (supa.user) {
+      this.router.navigateByUrl('dashboard');
     }
-
-    supa.authChanges((event, _) => {
-      if (event === 'SIGNED_IN') {
-        router.navigateByUrl('dashboard');
-      }
-    });
   }
 
   async handleLogin(email: string) {
     try {
-      this.loading = true;
-      const {error} = await this.supa.signIn(email);
+      this.sending = true;
+      const {error} = await this.supa.base.auth.signInWithOtp({email});
       if (error) {
         alert(`It seems that you don't have the permission to login!`);
       } else {
@@ -68,17 +62,15 @@ export class LoginComponent {
     } catch (error: any) {
       alert(error.error_description || error.message);
     } finally {
-      this.loading = false;
+      this.sending = false;
     }
   }
 
   async oauth() {
-    const {user, session, error} = await this.supa.base.auth.signIn({provider: 'github'});
+    const {error} = await this.supa.base.auth.signInWithOAuth({provider: 'github'});
 
     if (error) {
       alert('Failed to sign in with GitHub.');
     }
-
-    console.log(user, session);
   }
 }

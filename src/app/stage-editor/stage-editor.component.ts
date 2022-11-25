@@ -32,7 +32,7 @@ export class StageEditorComponent {
 
   async addGroup(s: Stage) {
     const {data: group, error} = await this.supa.base
-      .from<definitions['group']>('group')
+      .from('group')
       .insert({
         user_id: this.supa.user!.id,
         tournament_id: this.tournament!.id,
@@ -41,6 +41,7 @@ export class StageEditorComponent {
         name: this.groupName(s.groups.length),
         winner_count: s.default_winner_count,
       } as definitions['group'])
+      .select()
       .single();
 
     if (!error) {
@@ -54,11 +55,9 @@ export class StageEditorComponent {
       return {group_id: g.id, participant_id: p.id, order: Math.floor(i / s.groups.length)};
     });
 
-    const insertGroupParticipants = await this.supa.base
-      .from<definitions['group_participants']>('group_participants')
-      .upsert(groupParticipants);
+    const {error} = await this.supa.base.from('group_participants').upsert(groupParticipants);
 
-    if (insertGroupParticipants.error) {
+    if (error) {
       return alert(`Failed to fill participants into groups!`);
     }
 
@@ -74,7 +73,7 @@ export class StageEditorComponent {
     s: Stage,
   ) {
     await this.supa.base
-      .from<definitions['group_participants']>('group_participants')
+      .from('group_participants')
       .update({group_id: event.container.data.id})
       .match({group_id: event.previousContainer.data.id, participant_id: event.item.data.id});
 
@@ -85,7 +84,7 @@ export class StageEditorComponent {
     await this.clearMatches(s);
 
     await this.supa.base
-      .from<definitions['group_participants']>('group_participants')
+      .from('group_participants')
       .delete()
       .in(
         'group_id',
@@ -98,15 +97,9 @@ export class StageEditorComponent {
   async dropGroup(s: Stage, group: Stage['groups'][number]) {
     await this.clearMatches(s);
 
-    await this.supa.base
-      .from<definitions['group_participants']>('group_participants')
-      .delete()
-      .eq('group_id', group.id);
+    await this.supa.base.from('group_participants').delete().eq('group_id', group.id);
 
-    const {error} = await this.supa.base
-      .from<definitions['group']>('group')
-      .delete()
-      .eq('id', group.id);
+    const {error} = await this.supa.base.from('group').delete().eq('id', group.id);
 
     if (error) {
       alert('Failed to remove the group.');
@@ -119,13 +112,13 @@ export class StageEditorComponent {
     await this.clearMatches(s);
 
     const matches = GenMatches.gen(s).flat();
-    await this.supa.base.from<definitions['match']>('match').insert(matches);
+    await this.supa.base.from('match').insert(matches);
 
     this.change.emit(s);
   }
 
   async clearMatches(s: Stage) {
-    await this.supa.base.from<definitions['match']>('match').delete().match({stage_id: s.id});
+    await this.supa.base.from('match').delete().match({stage_id: s.id});
   }
 
   editGroup(s: Stage, g: Stage['groups'][number], template: TemplateRef<any>) {
@@ -136,10 +129,7 @@ export class StageEditorComponent {
       .afterClosed()
       .pipe(filter(Boolean))
       .subscribe(async data => {
-        const {error} = await this.supa.base
-          .from<definitions['group']>('group')
-          .update(data)
-          .eq('id', g.id);
+        const {error} = await this.supa.base.from('group').update(data).eq('id', g.id);
 
         if (error) {
           alert('Failed to update group.');

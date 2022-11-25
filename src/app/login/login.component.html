@@ -3,7 +3,7 @@
     <p>Sign-in via Magic Link?</p>
 
     <div class="flex gap-4 items-center">
-      <mat-form-field appearance="outline">
+      <mat-form-field>
         <mat-label>Email</mat-label>
         <input
           type="email"
@@ -16,15 +16,15 @@
         />
       </mat-form-field>
 
-      <button type="submit" color="primary" mat-raised-button [disabled]="loading || f.invalid">
-        {{ loading ? 'Sending Magic Link...' : 'Send Magic Link' }}
+      <button type="submit" color="primary" mat-raised-button [disabled]="sending || f.invalid">
+        {{ sending ? 'Sending Magic Link...' : 'Send Magic Link' }}
       </button>
     </div>
   </form>
 
   <mat-divider class="w-full"></mat-divider>
 
-  <div class="self-stretch px-4 py-2 rounded bg-slate-200">
+  <div class="self-stretch px-4 py-2 rounded bg-slate-200 flex gap-2 items-center">
     Or sign-in with:
     <button mat-icon-button (click)="oauth()">
       <mat-icon svgIcon="github"></mat-icon>
