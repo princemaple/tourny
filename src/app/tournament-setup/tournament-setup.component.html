@@ -38,7 +38,7 @@
 
     <h5>Participants</h5>
 
-    <mat-chip-list
+    <mat-chip-listbox
       class="mb-4"
       *ngIf="tournament?.participants?.length"
       aria-label="participant list"
@@ -46,13 +46,13 @@
       name="participants"
       required
     >
-      <mat-chip *ngFor="let p of tournament?.participants" (removed)="removeParticipant(p)">
+      <mat-chip-option *ngFor="let p of tournament?.participants" (removed)="removeParticipant(p)">
         {{ p.name }}
         <button matChipRemove>
           <mat-icon>cancel</mat-icon>
         </button>
-      </mat-chip>
-    </mat-chip-list>
+      </mat-chip-option>
+    </mat-chip-listbox>
 
     <div class="flex gap-4 justify-center">
       <button mat-button color="primary" type="button" (click)="addParticipant()">

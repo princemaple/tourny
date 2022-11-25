@@ -1,4 +1,4 @@
-<mat-card *ngFor="let t of tournaments" class="!flex flex-col">
+<mat-card appearance="outlined" *ngFor="let t of tournaments" class="!flex flex-col">
   <mat-card-title>{{ t.name }}</mat-card-title>
   <mat-card-subtitle>
     <span>{{ t.start_at | date }}</span>
@@ -16,7 +16,7 @@
   </mat-card-actions>
 </mat-card>
 
-<mat-card>
+<mat-card appearance="outlined">
   <mat-card-content class="h-full !flex flex-col justify-center items-center">
     <p>New tournament</p>
     <a mat-stroked-button color="primary" routerLink="/tournaments/new">

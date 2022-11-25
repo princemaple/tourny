@@ -21,7 +21,7 @@
 
 <ng-template #fields>
   <div *ngFor="let kv of _value; trackBy: trackByFn" class="flex items-center gap-2">
-    <mat-form-field appearance="standard" class="key">
+    <mat-form-field class="key">
       <mat-label>Key</mat-label>
       <input
         matInput
@@ -33,7 +33,7 @@
         required
       />
     </mat-form-field>
-    <mat-form-field appearance="standard">
+    <mat-form-field>
       <mat-label class="key">Value</mat-label>
       <input
         matInput

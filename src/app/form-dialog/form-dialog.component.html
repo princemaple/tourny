@@ -4,7 +4,7 @@
 
 <form id="form-dialog-form" class="flex flex-col" #f="ngForm" (ngSubmit)="ref.close(f.value)">
   <ng-container *ngFor="let field of data.fields" [ngSwitch]="field.type">
-    <mat-form-field *ngSwitchCase="'select'" appearance="standard">
+    <mat-form-field *ngSwitchCase="'select'">
       <mat-label>{{ field.label || field.name }}</mat-label>
       <mat-select
         [ngModel]="field.default"
@@ -23,7 +23,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field *ngSwitchCase="'textarea'" appearance="standard">
+    <mat-form-field *ngSwitchCase="'textarea'">
       <mat-label>{{ field.label ?? field.name }}</mat-label>
       <textarea
         matInput
@@ -50,7 +50,7 @@
     </mat-radio-group>
 
     <!-- workaround -->
-    <mat-form-field *ngSwitchCase="'number'" appearance="standard">
+    <mat-form-field *ngSwitchCase="'number'">
       <mat-label>{{ field.label ?? field.name }}</mat-label>
       <input
         matInput
@@ -69,7 +69,7 @@
 
     <input *ngSwitchCase="'hidden'" type="hidden" [ngModel]="field.default" [name]="field.name" />
 
-    <mat-form-field *ngSwitchDefault appearance="standard">
+    <mat-form-field *ngSwitchDefault>
       <mat-label>{{ field.label ?? field.name }}</mat-label>
       <input
         matInput

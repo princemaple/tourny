@@ -49,14 +49,14 @@
   >
     <h4>Tournament Stages</h4>
 
-    <mat-card *modelArrayItem="let stage">
+    <mat-card appearance="outlined" *modelArrayItem="let stage">
       <mat-card-content class="!flex gap-4">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>Stage Name</mat-label>
           <input matInput [(ngModel)]="stage.name" required />
         </mat-form-field>
 
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-label>Type</mat-label>
           <mat-select [(ngModel)]="stage.type" required>
             <mat-option value="round_robin">Round Robin</mat-option>
@@ -66,7 +66,6 @@
         </mat-form-field>
 
         <mat-form-field
-          appearance="standard"
           class="w-[64px]"
           matTooltip="Default, can change per match"
           matTooltipPosition="right"
