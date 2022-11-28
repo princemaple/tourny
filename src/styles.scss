@@ -1,3 +1,25 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$primary: mat.define-palette(mat.$indigo-palette, 500);
+$accent: mat.define-palette(mat.$green-palette, A400, A200, A700);
+
+$typography: mat.define-typography-config();
+
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+    ),
+    typography: $typography,
+  )
+);
+
+@include mat.all-component-themes($theme);
+@include mat.form-field-density(-1);
+
 @tailwind base;
 @tailwind utilities;
 

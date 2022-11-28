@@ -2,7 +2,13 @@
   {{ data.title }}
 </h2>
 
-<form id="form-dialog-form" class="flex flex-col" #f="ngForm" (ngSubmit)="ref.close(f.value)">
+<form
+  id="form-dialog-form"
+  mat-dialog-content
+  class="!flex flex-col"
+  #f="ngForm"
+  (ngSubmit)="ref.close(f.value)"
+>
   <ng-container *ngFor="let field of data.fields" [ngSwitch]="field.type">
     <mat-form-field *ngSwitchCase="'select'">
       <mat-label>{{ field.label || field.name }}</mat-label>

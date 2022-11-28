@@ -16,6 +16,7 @@ export class AppComponent {
     } = await this.supa.base.auth.getSession();
 
     if (session?.user) {
+      this.supa.user = session!.user;
       this.router.navigateByUrl('dashboard');
     }
 
