@@ -24,6 +24,7 @@ import {TournamentFormComponent} from './tournament-form/tournament-form.compone
 import {TournamentSetupComponent} from './tournament-setup/tournament-setup.component';
 import {MatchNodeComponent} from './match-node/match-node.component';
 import {MatchTreeComponent} from './match-tree/match-tree.component';
+import {MatchSchedulerComponent} from './match-scheduler/match-scheduler.component';
 import {StageEditorComponent} from './stage-editor/stage-editor.component';
 
 import {ApplyPipe} from './utils/apply.pipe';
@@ -42,6 +43,7 @@ import {ModelArrayModule} from './model-array/model-array.module';
     TournamentSetupComponent,
     MatchNodeComponent,
     MatchTreeComponent,
+    MatchSchedulerComponent,
     StageEditorComponent,
   ],
   imports: [
