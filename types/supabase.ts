@@ -12,6 +12,111 @@ export interface paths {
       };
     };
   };
+  "/venue": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.venue.id"];
+          name?: parameters["rowFilter.venue.name"];
+          description?: parameters["rowFilter.venue.description"];
+          tournament_id?: parameters["rowFilter.venue.tournament_id"];
+          user_id?: parameters["rowFilter.venue.user_id"];
+          created_at?: parameters["rowFilter.venue.created_at"];
+          updated_at?: parameters["rowFilter.venue.updated_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["venue"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** venue */
+          venue?: definitions["venue"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.venue.id"];
+          name?: parameters["rowFilter.venue.name"];
+          description?: parameters["rowFilter.venue.description"];
+          tournament_id?: parameters["rowFilter.venue.tournament_id"];
+          user_id?: parameters["rowFilter.venue.user_id"];
+          created_at?: parameters["rowFilter.venue.created_at"];
+          updated_at?: parameters["rowFilter.venue.updated_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.venue.id"];
+          name?: parameters["rowFilter.venue.name"];
+          description?: parameters["rowFilter.venue.description"];
+          tournament_id?: parameters["rowFilter.venue.tournament_id"];
+          user_id?: parameters["rowFilter.venue.user_id"];
+          created_at?: parameters["rowFilter.venue.created_at"];
+          updated_at?: parameters["rowFilter.venue.updated_at"];
+        };
+        body: {
+          /** venue */
+          venue?: definitions["venue"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/tournament": {
     get: {
       parameters: {
@@ -672,6 +777,36 @@ export interface paths {
 }
 
 export interface definitions {
+  venue: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: string;
+    /** Format: character varying */
+    name: string;
+    /** Format: text */
+    description?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `tournament.id`.<fk table='tournament' column='id'/>
+     */
+    tournament_id: string;
+    /** Format: uuid */
+    user_id: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at: string;
+  };
   tournament: {
     /**
      * Format: uuid
@@ -943,6 +1078,22 @@ export interface parameters {
   offset: string;
   /** @description Limiting and Pagination */
   limit: string;
+  /** @description venue */
+  "body.venue": definitions["venue"];
+  /** Format: uuid */
+  "rowFilter.venue.id": string;
+  /** Format: character varying */
+  "rowFilter.venue.name": string;
+  /** Format: text */
+  "rowFilter.venue.description": string;
+  /** Format: uuid */
+  "rowFilter.venue.tournament_id": string;
+  /** Format: uuid */
+  "rowFilter.venue.user_id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.venue.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.venue.updated_at": string;
   /** @description tournament */
   "body.tournament": definitions["tournament"];
   /** Format: uuid */
