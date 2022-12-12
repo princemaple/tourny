@@ -24,11 +24,13 @@ export class SupaService {
       },
 
       global: {
-        fetch: (url: URL | RequestInfo, options?: RequestInit | undefined) => {
+        fetch: async (url: URL | RequestInfo, options?: RequestInit | undefined) => {
           loading.inc();
-          return fetch(url, options).finally(() => {
+          try {
+            return await fetch(url, options);
+          } finally {
             loading.dec();
-          });
+          }
         },
       },
     });
