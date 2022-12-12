@@ -18,6 +18,6 @@ export class LoginGuard implements CanActivate {
     _route: ActivatedRouteSnapshot,
     _state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.supa.user$.pipe(map(Boolean)) ? true : this.router.parseUrl('login');
+    return this.supa.user$.pipe(map(user => (user ? true : this.router.parseUrl('login'))));
   }
 }

@@ -17,6 +17,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: pg_net; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "pg_net" WITH SCHEMA "extensions";
+
+
+--
 -- Name: pgsodium; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -192,7 +199,7 @@ ALTER TABLE "public"."tournament" OWNER TO "postgres";
 --
 
 CREATE TABLE "public"."venue" (
-    "id" "uuid" NOT NULL,
+    "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "name" character varying NOT NULL,
     "description" "text",
     "tournament_id" "uuid" NOT NULL,
@@ -487,6 +494,13 @@ CREATE POLICY "Enable delete for users based on user_id" ON "public"."tournament
 
 
 --
+-- Name: venue Enable delete for users based on user_id; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "Enable delete for users based on user_id" ON "public"."venue" FOR DELETE TO "authenticated" USING (("auth"."uid"() = "user_id"));
+
+
+--
 -- Name: tournament Enable insert for authenticated users only; Type: POLICY; Schema: public; Owner: postgres
 --
 
@@ -540,6 +554,15 @@ CREATE POLICY "Enable insert for tournament creator" ON "public"."stage" FOR INS
 
 
 --
+-- Name: venue Enable insert for tournament creator; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "Enable insert for tournament creator" ON "public"."venue" FOR INSERT TO "authenticated" WITH CHECK (("auth"."uid"() IN ( SELECT "tournament"."user_id"
+   FROM "public"."tournament"
+  WHERE ("tournament"."id" = "venue"."tournament_id"))));
+
+
+--
 -- Name: group Enable read access for all users; Type: POLICY; Schema: public; Owner: postgres
 --
 
@@ -579,6 +602,20 @@ CREATE POLICY "Enable read access for all users" ON "public"."stage" FOR SELECT 
 --
 
 CREATE POLICY "Enable read access for all users" ON "public"."tournament" FOR SELECT USING (true);
+
+
+--
+-- Name: venue Enable read access for all users; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "Enable read access for all users" ON "public"."venue" FOR SELECT USING (true);
+
+
+--
+-- Name: venue Enable update for creator; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "Enable update for creator" ON "public"."venue" FOR UPDATE TO "authenticated" USING (("auth"."uid"() = "user_id")) WITH CHECK (("auth"."uid"() = "user_id"));
 
 
 --
@@ -669,6 +706,16 @@ ALTER TABLE "public"."tournament" ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE "public"."venue" ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: SCHEMA "net"; Type: ACL; Schema: -; Owner: supabase_admin
+--
+
+GRANT USAGE ON SCHEMA "net" TO "supabase_functions_admin";
+GRANT USAGE ON SCHEMA "net" TO "anon";
+GRANT USAGE ON SCHEMA "net" TO "authenticated";
+GRANT USAGE ON SCHEMA "net" TO "service_role";
+
 
 --
 -- Name: SCHEMA "public"; Type: ACL; Schema: -; Owner: postgres
@@ -1122,6 +1169,42 @@ GRANT ALL ON FUNCTION "extensions"."verify"("token" "text", "secret" "text", "al
 -- GRANT ALL ON FUNCTION "graphql_public"."graphql"("operationName" "text", "query" "text", "variables" "jsonb", "extensions" "jsonb") TO "anon";
 -- GRANT ALL ON FUNCTION "graphql_public"."graphql"("operationName" "text", "query" "text", "variables" "jsonb", "extensions" "jsonb") TO "authenticated";
 -- GRANT ALL ON FUNCTION "graphql_public"."graphql"("operationName" "text", "query" "text", "variables" "jsonb", "extensions" "jsonb") TO "service_role";
+
+
+--
+-- Name: FUNCTION "http_collect_response"("request_id" bigint, "async" boolean); Type: ACL; Schema: net; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION "net"."http_collect_response"("request_id" bigint, "async" boolean) FROM PUBLIC;
+GRANT ALL ON FUNCTION "net"."http_collect_response"("request_id" bigint, "async" boolean) TO "supabase_functions_admin";
+GRANT ALL ON FUNCTION "net"."http_collect_response"("request_id" bigint, "async" boolean) TO "postgres";
+GRANT ALL ON FUNCTION "net"."http_collect_response"("request_id" bigint, "async" boolean) TO "anon";
+GRANT ALL ON FUNCTION "net"."http_collect_response"("request_id" bigint, "async" boolean) TO "authenticated";
+GRANT ALL ON FUNCTION "net"."http_collect_response"("request_id" bigint, "async" boolean) TO "service_role";
+
+
+--
+-- Name: FUNCTION "http_get"("url" "text", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer); Type: ACL; Schema: net; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION "net"."http_get"("url" "text", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) FROM PUBLIC;
+GRANT ALL ON FUNCTION "net"."http_get"("url" "text", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "supabase_functions_admin";
+GRANT ALL ON FUNCTION "net"."http_get"("url" "text", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "postgres";
+GRANT ALL ON FUNCTION "net"."http_get"("url" "text", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "anon";
+GRANT ALL ON FUNCTION "net"."http_get"("url" "text", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "net"."http_get"("url" "text", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "service_role";
+
+
+--
+-- Name: FUNCTION "http_post"("url" "text", "body" "jsonb", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer); Type: ACL; Schema: net; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION "net"."http_post"("url" "text", "body" "jsonb", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) FROM PUBLIC;
+GRANT ALL ON FUNCTION "net"."http_post"("url" "text", "body" "jsonb", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "supabase_functions_admin";
+GRANT ALL ON FUNCTION "net"."http_post"("url" "text", "body" "jsonb", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "postgres";
+GRANT ALL ON FUNCTION "net"."http_post"("url" "text", "body" "jsonb", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "anon";
+GRANT ALL ON FUNCTION "net"."http_post"("url" "text", "body" "jsonb", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "net"."http_post"("url" "text", "body" "jsonb", "params" "jsonb", "headers" "jsonb", "timeout_milliseconds" integer) TO "service_role";
 
 
 --

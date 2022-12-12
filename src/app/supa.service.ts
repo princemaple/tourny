@@ -56,6 +56,8 @@ export class SupaService {
 
     if (session?.user) {
       this.user = session!.user;
+    } else {
+      this.user = null;
     }
 
     this.base.auth.onAuthStateChange((event, session) => {
