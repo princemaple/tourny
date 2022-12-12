@@ -1,10 +1,10 @@
 <form (ngSubmit)="submit(f)" #f="ngForm" class="mt-4 min-w-[360px] flex flex-col items-stretch">
-  <mat-form-field appearance="fill">
+  <mat-form-field>
     <mat-label>Title</mat-label>
     <input matInput [ngModel]="params.name" name="name" required />
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field>
     <mat-label>Description</mat-label>
     <textarea
       matInput
@@ -18,7 +18,7 @@
     ></textarea>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field>
     <mat-label>Start</mat-label>
     <input
       matInput
@@ -31,7 +31,7 @@
     <mat-datepicker #startPicker></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field>
     <mat-label>End</mat-label>
     <input matInput [matDatepicker]="endPicker" [ngModel]="params.end_at" name="end_at" />
     <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>

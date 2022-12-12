@@ -77,12 +77,12 @@
 </mat-menu>
 
 <ng-template #editGroupForm let-group let-stage="stage">
-  <mat-form-field appearance="fill">
+  <mat-form-field>
     <mat-label>Group Name</mat-label>
     <input matInput [ngModel]="group.name" name="name" required />
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field>
     <mat-label># of participants</mat-label>
     <input
       matInput
