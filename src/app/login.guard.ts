@@ -7,7 +7,7 @@ import {
   UrlTree,
 } from '@angular/router';
 
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 
 import {SupaService} from './supa.service';
 
@@ -18,6 +18,6 @@ export class LoginGuard implements CanActivate {
     _route: ActivatedRouteSnapshot,
     _state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return !!this.supa.user ? true : this.router.parseUrl('');
+    return this.supa.user$.pipe(map(Boolean)) ? true : this.router.parseUrl('login');
   }
 }
