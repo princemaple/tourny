@@ -9,6 +9,7 @@ import {LoadingService} from '../loading.service';
 import {SupaService} from '../supa.service';
 
 export type Data = Partial<definitions['tournament']> & {
+  venues: definitions['venue'][];
   stages: (definitions['stage'] & {
     groups: (definitions['group'] & {
       participants: definitions['participant'][];
@@ -56,6 +57,7 @@ export class TournamentSetupComponent {
       .select(
         `
           id, name, description, start_at, end_at, meta,
+          venues:venue(*),
           stages:stage(${StageQuery}),
           participants:participant(*)
         `,
@@ -64,6 +66,47 @@ export class TournamentSetupComponent {
       .single();
 
     this.tournament = data;
+  }
+
+  async addVenue() {
+    const fd = await import('../form-dialog/form-dialog.component').then(
+      m => m.FormDialogComponent,
+    );
+
+    this.dialog
+      .open(fd, {
+        data: {
+          fields: [
+            {name: 'name', label: 'Name', placeholder: 'YMCA Court A'},
+            {
+              name: 'description',
+              label: 'Description',
+              type: 'textarea',
+              placeholder: 'Description and/or direction to the venue',
+            },
+          ],
+        },
+      })
+      .afterClosed()
+      .pipe(filter(Boolean))
+      .subscribe(async ({name, description}) => {
+        const {data, error} = await this.supa.base
+          .from('venue')
+          .insert({
+            name,
+            description,
+            user_id: this.supa.user!.id,
+            tournament_id: this.tournament!.id,
+          } as definitions['venue'])
+          .select()
+          .single();
+
+        if (error) {
+          return alert('failed to add venue...');
+        }
+
+        this.tournament!.venues = [...this.tournament!.venues!, data!];
+      });
   }
 
   async addParticipant() {

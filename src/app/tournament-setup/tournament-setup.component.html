@@ -29,30 +29,40 @@
   </section>
 
   <section class="flex flex-col">
-    <h4>Tournament Participants</h4>
+    <h4>Venue</h4>
 
-    <div class="text-slate-500 rounded bg-gray-100 p-4">
+    <mat-list>
+      <mat-list-item *ngFor="let venue of tournament?.venues">
+        <span matListItemTitle>{{ venue.name }}</span>
+        <span>{{ venue.description }}</span>
+      </mat-list-item>
+    </mat-list>
+
+    <div class="flex gap-4 justify-center">
+      <button mat-button color="primary" type="button" (click)="addVenue()">Add Venue</button>
+    </div>
+  </section>
+
+  <section class="flex flex-col">
+    <h4>Participants</h4>
+
+    <div class="text-slate-500 rounded bg-gray-100 p-4 mb-4">
       A participant is, for example, a "team" in basketball 5v5 / 3v3 tournament, a "player" in solo
       tennis tournament.
     </div>
 
-    <h5>Participants</h5>
-
-    <mat-chip-listbox
+    <mat-chip-set
       class="mb-4"
       *ngIf="tournament?.participants?.length"
       aria-label="participant list"
-      [ngModel]="tournament!.participants"
-      name="participants"
-      required
     >
-      <mat-chip-option *ngFor="let p of tournament?.participants" (removed)="removeParticipant(p)">
+      <mat-chip *ngFor="let p of tournament?.participants" (removed)="removeParticipant(p)">
         {{ p.name }}
         <button matChipRemove>
           <mat-icon>cancel</mat-icon>
         </button>
-      </mat-chip-option>
-    </mat-chip-listbox>
+      </mat-chip>
+    </mat-chip-set>
 
     <div class="flex gap-4 justify-center">
       <button mat-button color="primary" type="button" (click)="addParticipant()">
@@ -65,7 +75,7 @@
     </div>
   </section>
 
-  <h4>Tournament Stages</h4>
+  <h4>Stages</h4>
 
   <ng-container *ngFor="let stage of tournament?.stages; index as i">
     <tn-stage-editor

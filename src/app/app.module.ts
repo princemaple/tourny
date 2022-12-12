@@ -11,6 +11,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatListModule} from '@angular/material/list';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -59,6 +60,7 @@ import {ModelArrayModule} from './model-array/model-array.module';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatListModule,
     MatNativeDateModule,
     MatDatepickerModule,
     MatSelectModule,
