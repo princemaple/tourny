@@ -10,6 +10,7 @@ import {GenMatches} from '../core/gen-matches';
 import {SupaService} from '../supa.service';
 import {Data as Tournament} from '../tournament-setup/tournament-setup.component';
 import {FormDialogComponent} from '../form-dialog/form-dialog.component';
+import {MatchSchedulerComponent} from '../match-scheduler/match-scheduler.component';
 
 type Stage = Tournament['stages'][number];
 
@@ -137,5 +138,12 @@ export class StageEditorComponent {
 
         this.change.emit(this.stage);
       });
+  }
+
+  scheduleMatches(s: Stage) {
+    this.dialog
+      .open(MatchSchedulerComponent, {data: {stage: s, tournament: this.tournament}})
+      .afterClosed()
+      .subscribe(console.log);
   }
 }

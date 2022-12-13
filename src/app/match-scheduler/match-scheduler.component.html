@@ -1,1 +1,41 @@
-<p>match-scheduler works!</p>
+<div class="flex overflow-hidden border-0 border-b-2 border-solid border-slate-200">
+  <div class="scheduler p-2">
+    <mat-chip-listbox multiple [ngModel]="defaultVenues">
+      <mat-chip-option *ngFor="let v of data.tournament.venues" [value]="v">
+        {{ v.name }}
+      </mat-chip-option>
+    </mat-chip-listbox>
+
+    <mat-form-field>
+      <mat-label>Start Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="startPicker"
+        [ngModel]="data.tournament.start_at"
+        name="start_at"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Start Time</mat-label>
+      <input matInput type="time" [value]="data.tournament.start_at" required />
+    </mat-form-field>
+  </div>
+
+  <div class="schedule">
+    <mat-list class="max-h-[400px] overflow-auto shadow-md">
+      <mat-list-item *ngFor="let m of data.stage.matches">
+        <span matListItemTitle>{{ m.leftP?.name }} vs {{ m.rightP?.name }}</span>
+        <span matListItemLine>{{ m.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+
+<mat-dialog-actions>
+  <button mat-button color="primary" (click)="applySchedule()">Apply Schedule</button>
+  <button mat-button matDialogClose>Cancel</button>
+</mat-dialog-actions>
