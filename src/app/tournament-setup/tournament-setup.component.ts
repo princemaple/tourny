@@ -109,6 +109,11 @@ export class TournamentSetupComponent {
       });
   }
 
+  async delVenue(v: definitions['venue']) {
+    await this.supa.base.from('venue').delete({count: 'exact'}).match({id: v.id});
+    this.loadTournament(v.tournament_id);
+  }
+
   async addParticipant() {
     const fd = await import('../form-dialog/form-dialog.component').then(
       m => m.FormDialogComponent,
