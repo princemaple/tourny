@@ -1,6 +1,6 @@
 <div class="flex overflow-hidden border-0 border-b-2 border-solid border-slate-200">
-  <div class="scheduler p-2">
-    <mat-chip-listbox multiple [ngModel]="defaultVenues">
+  <form class="scheduler p-4 flex flex-col" #f="ngForm">
+    <mat-chip-listbox multiple [ngModel]="defaultVenues" name="venues" class="mb-2">
       <mat-chip-option *ngFor="let v of data.tournament.venues" [value]="v">
         {{ v.name }}
       </mat-chip-option>
@@ -12,7 +12,7 @@
         matInput
         [matDatepicker]="startPicker"
         [ngModel]="data.tournament.start_at"
-        name="start_at"
+        name="startOn"
         required
       />
       <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
@@ -21,12 +21,36 @@
 
     <mat-form-field>
       <mat-label>Start Time</mat-label>
-      <input matInput type="time" [value]="data.tournament.start_at" required />
+      <input matInput type="time" [ngModel]="data.tournament.start_at" name="startAt" required />
     </mat-form-field>
-  </div>
 
-  <div class="schedule">
-    <mat-list class="max-h-[400px] overflow-auto shadow-md">
+    <mat-form-field>
+      <mat-label>End Time</mat-label>
+      <input matInput type="time" [ngModel]="data.tournament.end_at" name="endAt" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Gap</mat-label>
+      <input matInput type="number" ngModel name="gap" />
+      <mat-hint>in minutes</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>End Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="endPicker"
+        [ngModel]="data.tournament.end_at"
+        name="endOn"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+  </form>
+
+  <div class="schedule shadow-md px-2">
+    <mat-list>
       <mat-list-item *ngFor="let m of data.stage.matches">
         <span matListItemTitle>{{ m.leftP?.name }} vs {{ m.rightP?.name }}</span>
         <span matListItemLine>{{ m.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
