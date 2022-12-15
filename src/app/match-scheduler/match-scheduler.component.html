@@ -1,7 +1,11 @@
 <div class="flex overflow-hidden border-0 border-b-2 border-solid border-slate-200">
-  <form class="scheduler p-4 flex flex-col" #f="ngForm">
+  <form
+    class="scheduler p-4 flex flex-col"
+    #f="ngForm"
+    (ngSubmit)="addRule(f); startOnInput.focus()"
+  >
     <mat-chip-listbox multiple [ngModel]="defaultVenues" name="venues" class="mb-2">
-      <mat-chip-option *ngFor="let v of data.tournament.venues" [value]="v">
+      <mat-chip-option *ngFor="let v of data.tournament.venues" [value]="v.name">
         {{ v.name }}
       </mat-chip-option>
     </mat-chip-listbox>
@@ -14,6 +18,7 @@
         [ngModel]="data.tournament.start_at"
         name="startOn"
         required
+        #startOnInput
       />
       <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
       <mat-datepicker #startPicker></mat-datepicker>
@@ -21,12 +26,18 @@
 
     <mat-form-field>
       <mat-label>Start Time</mat-label>
-      <input matInput type="time" [ngModel]="data.tournament.start_at" name="startAt" required />
+      <input matInput type="time" ngModel name="startAt" required />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>End Time</mat-label>
-      <input matInput type="time" [ngModel]="data.tournament.end_at" name="endAt" />
+      <input matInput type="time" ngModel name="endAt" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Duration</mat-label>
+      <input matInput type="number" ngModel name="duration" />
+      <mat-hint>in minutes, for each match</mat-hint>
     </mat-form-field>
 
     <mat-form-field>
@@ -37,21 +48,62 @@
 
     <mat-form-field>
       <mat-label>End Date</mat-label>
-      <input
-        matInput
-        [matDatepicker]="endPicker"
-        [ngModel]="data.tournament.end_at"
-        name="endOn"
-        required
-      />
+      <input matInput [matDatepicker]="endPicker" [ngModel]="data.tournament.end_at" name="endOn" />
       <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
       <mat-datepicker #endPicker></mat-datepicker>
+      <mat-hint>including this day</mat-hint>
     </mat-form-field>
+
+    <mat-slide-toggle [ngModel]="false" name="repeat" #repeatModel="ngModel" class="mb-4">
+      Repeat?
+    </mat-slide-toggle>
+
+    <mat-form-field *ngIf="repeatModel.control.value">
+      <mat-label>Every X days</mat-label>
+      <input matInput type="number" ngModel name="repeatDays" />
+    </mat-form-field>
+
+    <div>
+      <button mat-raised-button color="primary" [disabled]="f.invalid">Add Rule</button>
+    </div>
   </form>
+
+  <mat-list class="schedule-rules" *ngIf="rules.value.length; else noRules">
+    <mat-list-item *ngFor="let rule of rules | async">
+      <span matListItemTitle>
+        <span>{{ rule.startOn | date : 'yyyy-MM-dd' }} {{ rule.startAt }}</span>
+        <span *ngIf="rule.endAt"> - {{ rule.endAt }}</span>
+      </span>
+      <span matListItemLine>
+        <span *ngFor="let c of rule.venues; last as isLast">
+          <span>{{ c }}</span>
+          <span *ngIf="!isLast">, </span>
+        </span>
+      </span>
+      <span matListItemLine [ngSwitch]="rule.repeat">
+        <span *ngSwitchCase="true">
+          <span>Every {{ rule.repeatDays }} Days</span>
+          <span *ngIf="rule.endOn"> till {{ rule.endOn | date : 'yyyy-MM-dd' }}</span>
+        </span>
+        <span *ngSwitchCase="false">No Repeat</span>
+      </span>
+      <div matListItemMeta>
+        <button mat-icon-button color="warn" (click)="delRule(rule)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+    </mat-list-item>
+  </mat-list>
+
+  <ng-template #noRules>
+    <div class="m-4 ml-0 p-8 border-dashed border-2 border-gray-200 rounded-lg flex items-center">
+      No scheduling rules created yet
+    </div>
+  </ng-template>
 
   <div class="schedule shadow-md px-2">
     <mat-list>
-      <mat-list-item *ngFor="let m of data.stage.matches">
+      <mat-list-item *ngFor="let m of matches">
         <span matListItemTitle>{{ m.leftP?.name }} vs {{ m.rightP?.name }}</span>
         <span matListItemLine>{{ m.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
       </mat-list-item>
@@ -59,7 +111,7 @@
   </div>
 </div>
 
-<mat-dialog-actions>
-  <button mat-button color="primary" (click)="applySchedule()">Apply Schedule</button>
+<mat-dialog-actions align="end">
   <button mat-button matDialogClose>Cancel</button>
+  <button mat-button color="primary" (click)="applySchedule()">Apply Schedule</button>
 </mat-dialog-actions>

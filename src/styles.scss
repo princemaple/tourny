@@ -36,3 +36,7 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
+form.flex-col .mat-mdc-form-field:has(mat-hint, mat-error) {
+  margin-bottom: 1em;
+}
