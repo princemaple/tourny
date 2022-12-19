@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule} from '@angular/forms';
@@ -73,6 +73,7 @@ import {ModelArrayModule} from './model-array/model-array.module';
     KeyValueFieldModule,
     ModelArrayModule,
   ],
+  providers: [{provide: LOCALE_ID, useValue: 'en-AU'}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
