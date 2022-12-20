@@ -83,7 +83,7 @@ class MatchSlotGenerator {
             : true)
         ) {
           for (let venue of venues) {
-            yield {start_at: matchStartDt, end_at: matchEndDt, venue};
+            yield {start_at: matchStartDt, end_at: matchEndDt, venue, venue_id: venue.id};
           }
         } else {
           break;

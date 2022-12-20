@@ -3,7 +3,7 @@ import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {MatDialog} from '@angular/material/dialog';
 
 import {filter} from 'rxjs';
-import {startCase} from 'lodash-es';
+import {omit, startCase} from 'lodash-es';
 
 import {definitions} from 'types/supabase';
 import {GenMatches} from '../core/gen-matches';
@@ -147,13 +147,7 @@ export class StageEditorComponent {
       .pipe(filter(Boolean))
       .subscribe(async (matches: Stage['matches']) => {
         await this.supa.base.from('match').upsert(
-          matches.map(({id, start_at, end_at, venue, tournament_id}) => ({
-            id,
-            start_at,
-            end_at,
-            venue_id: venue?.id ?? null,
-            tournament_id,
-          })),
+          matches.map(match => omit(match, ['venue', 'leftP', 'rightP'])),
           {onConflict: 'id'},
         );
         this.change.emit(s);
