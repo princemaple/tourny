@@ -63,6 +63,7 @@ export function genEliminationMatches(s: Stage) {
         stage_id: s.id,
         group_id: g.id,
         games: genN(s.default_best_of),
+        sequence: {seq: index + 2, round: 0},
         best_of: s.default_best_of,
         next_match_id: matches[Math.floor(index / 2)]?.id,
       } as definitions['match']);
