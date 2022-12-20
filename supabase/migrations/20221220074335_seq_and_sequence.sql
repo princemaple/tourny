@@ -3,11 +3,11 @@
 -- and may require manual changes to the script to ensure changes are applied in the correct order.
 -- Please report an issue for any failure with the reproduction steps.
 
-ALTER TABLE IF EXISTS public."group" RENAME COLUMN order TO seq;
+ALTER TABLE IF EXISTS public."group" RENAME COLUMN "order" TO seq;
 
-ALTER TABLE IF EXISTS public."group_participants" RENAME COLUMN order TO seq;
+ALTER TABLE IF EXISTS public."group_participants" RENAME COLUMN "order" TO seq;
 
-ALTER TABLE IF EXISTS public."stage" RENAME COLUMN order TO seq;
+ALTER TABLE IF EXISTS public."stage" RENAME COLUMN "order" TO seq;
 
 ALTER TABLE IF EXISTS public."match"
     ADD COLUMN sequence jsonb NOT NULL DEFAULT '{}'::jsonb;
