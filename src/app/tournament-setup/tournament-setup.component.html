@@ -6,12 +6,12 @@
       <mat-icon>arrow_back</mat-icon>
     </a>
 
-    <h3>
+    <h2>
       {{ tournament?.name }}
       <a mat-icon-button routerLink="/tournaments/{{ tournament?.id }}/edit">
         <mat-icon fontIcon="edit"></mat-icon>
       </a>
-    </h3>
+    </h2>
 
     <mat-icon
       *ngIf="loading.count | async as c; else check"
@@ -29,7 +29,7 @@
   </section>
 
   <section class="flex flex-col">
-    <h4>Venue</h4>
+    <h3>Venue</h3>
 
     <mat-list>
       <mat-list-item *ngFor="let venue of tournament?.venues">
@@ -49,7 +49,7 @@
   </section>
 
   <section class="flex flex-col">
-    <h4>Participants</h4>
+    <h3>Participants</h3>
 
     <div class="text-slate-500 rounded bg-gray-100 p-4 mb-4">
       A participant is, for example, a "team" in basketball 5v5 / 3v3 tournament, a "player" in solo
@@ -80,7 +80,7 @@
     </div>
   </section>
 
-  <h4>Stages</h4>
+  <h3>Stages</h3>
 
   <ng-container *ngFor="let stage of tournament?.stages; index as i">
     <tn-stage-editor
