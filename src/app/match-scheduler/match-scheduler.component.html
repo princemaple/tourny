@@ -138,7 +138,10 @@
     <mat-list>
       <mat-list-item *ngFor="let m of scheduledMatches | async">
         <span matListItemTitle>{{ m.leftP?.name }} vs {{ m.rightP?.name }}</span>
-        <span matListItemLine>{{ m.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
+        <span matListItemLine>
+          <span>{{ m.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
+          <span *ngIf="m.end_at"> - {{ m.end_at | date : 'HH:mm' }}</span>
+        </span>
         <span matListItemLine>{{ m.venue?.name }}</span>
       </mat-list-item>
     </mat-list>
@@ -147,5 +150,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button matDialogClose>Cancel</button>
-  <button mat-button color="primary" (click)="applySchedule()">Apply Schedule</button>
+  <button mat-button color="primary" [matDialogClose]="scheduledMatches | async">
+    Apply Schedule
+  </button>
 </mat-dialog-actions>

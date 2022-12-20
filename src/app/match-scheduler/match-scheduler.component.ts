@@ -166,8 +166,6 @@ export class MatchSchedulerComponent {
     this.rules.next(this.rules.value.filter(r => r !== rule));
   }
 
-  applySchedule() {}
-
   isInclusive(r: Rule): r is InclusiveRule {
     return r.type == 'inclusive';
   }
