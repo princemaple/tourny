@@ -146,13 +146,14 @@ export class StageEditorComponent {
       .afterClosed()
       .pipe(filter(Boolean))
       .subscribe(async (matches: Stage['matches']) => {
-        await this.supa.base.from('match').update(
+        await this.supa.base.from('match').upsert(
           matches.map(({id, start_at, end_at, venue}) => ({
             id,
             start_at,
             end_at,
             venue_id: venue?.id ?? null,
           })),
+          {onConflict: 'id'},
         );
         this.change.emit(s);
       });
