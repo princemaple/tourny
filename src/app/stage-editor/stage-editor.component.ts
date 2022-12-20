@@ -147,11 +147,12 @@ export class StageEditorComponent {
       .pipe(filter(Boolean))
       .subscribe(async (matches: Stage['matches']) => {
         await this.supa.base.from('match').upsert(
-          matches.map(({id, start_at, end_at, venue}) => ({
+          matches.map(({id, start_at, end_at, venue, tournament_id}) => ({
             id,
             start_at,
             end_at,
             venue_id: venue?.id ?? null,
+            tournament_id,
           })),
           {onConflict: 'id'},
         );
