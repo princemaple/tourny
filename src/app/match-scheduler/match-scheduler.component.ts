@@ -81,7 +81,9 @@ class MatchSlotGenerator {
             ? isBefore(matchEndDt, dayEndDt) || isEqual(matchEndDt, dayEndDt)
             : true)
         ) {
-          yield {start_at: matchStartDt, end_at: matchEndDt, venues};
+          for (let venue of venues) {
+            yield {start_at: matchStartDt, end_at: matchEndDt, venue};
+          }
         } else {
           break;
         }

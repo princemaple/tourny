@@ -17,6 +17,7 @@ export type Data = Partial<definitions['tournament']> & {
     matches: (definitions['match'] & {
       leftP: {name: string} | null;
       rightP: {name: string} | null;
+      venue: definitions['venue'] | null;
     })[];
   })[];
   participants: definitions['participant'][];
@@ -25,7 +26,7 @@ export type Data = Partial<definitions['tournament']> & {
 const StageQuery = `
   *,
   groups:group(*, participants:participant(id, name)),
-  matches:match(*, leftP:left(name), rightP:right(name))
+  matches:match(*, leftP:left(name), rightP:right(name), venue:venue(name))
 `;
 
 @Component({

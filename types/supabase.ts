@@ -556,6 +556,7 @@ export interface paths {
           end_at?: parameters["rowFilter.match.end_at"];
           next_match_id?: parameters["rowFilter.match.next_match_id"];
           best_of?: parameters["rowFilter.match.best_of"];
+          venue_id?: parameters["rowFilter.match.venue_id"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -620,6 +621,7 @@ export interface paths {
           end_at?: parameters["rowFilter.match.end_at"];
           next_match_id?: parameters["rowFilter.match.next_match_id"];
           best_of?: parameters["rowFilter.match.best_of"];
+          venue_id?: parameters["rowFilter.match.venue_id"];
         };
         header: {
           /** Preference */
@@ -648,6 +650,7 @@ export interface paths {
           end_at?: parameters["rowFilter.match.end_at"];
           next_match_id?: parameters["rowFilter.match.next_match_id"];
           best_of?: parameters["rowFilter.match.best_of"];
+          venue_id?: parameters["rowFilter.match.venue_id"];
         };
         body: {
           /** match */
@@ -782,6 +785,7 @@ export interface definitions {
      * Format: uuid
      * @description Note:
      * This is a Primary Key.<pk/>
+     * @default extensions.uuid_generate_v4()
      */
     id: string;
     /** Format: character varying */
@@ -1000,6 +1004,12 @@ export interface definitions {
     next_match_id?: string;
     /** Format: smallint */
     best_of: number;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `venue.id`.<fk table='venue' column='id'/>
+     */
+    venue_id?: string;
   };
   group: {
     /**
@@ -1190,6 +1200,8 @@ export interface parameters {
   "rowFilter.match.next_match_id": string;
   /** Format: smallint */
   "rowFilter.match.best_of": string;
+  /** Format: uuid */
+  "rowFilter.match.venue_id": string;
   /** @description group */
   "body.group": definitions["group"];
   /** Format: uuid */
