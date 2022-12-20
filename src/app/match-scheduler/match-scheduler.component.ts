@@ -3,7 +3,18 @@ import {NgForm} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import {omit} from 'lodash-es';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, combineLatest, map, of} from 'rxjs';
+import {
+  Interval,
+  startOfDay,
+  endOfDay,
+  addMinutes,
+  isBefore,
+  isEqual,
+  addDays,
+  compareAsc,
+  isWithinInterval,
+} from 'date-fns';
 
 import {definitions} from 'types/supabase';
 import {Data as Tournament} from '../tournament-setup/tournament-setup.component';
@@ -31,6 +42,83 @@ type ExclusiveRule = {
 
 type Rule = InclusiveRule | ExclusiveRule;
 
+function parseTime(time: string) {
+  return time.split(':').map(s => parseInt(s)) as [number, number];
+}
+
+function mergeDateTime(date: Date, time: string) {
+  const [hour, minute] = parseTime(time);
+  const dt = new Date(date);
+  dt.setHours(hour);
+  dt.setMinutes(minute);
+  return dt;
+}
+
+class MatchSlotGenerator {
+  #value: {start_at: Date; end_at: Date | null} | undefined = undefined;
+  #gen = (function* (rule: InclusiveRule, excludedDates: Interval[]) {
+    const {startOn, startAt, endAt, endOn, duration, gap, repeat, repeatDays, venues} = rule;
+
+    const repeatEndDt = endOfDay(endOn);
+
+    let dayStartDt: Date | null = mergeDateTime(startOn, startAt);
+
+    do {
+      if (excludedDates.some(interval => isWithinInterval(dayStartDt!, interval))) {
+        dayStartDt = repeat ? addDays(dayStartDt, repeatDays) : null;
+        continue;
+      }
+      const dayEndDt = endAt ? mergeDateTime(dayStartDt, endAt) : null;
+
+      let matchStartDt: Date | null = dayStartDt;
+
+      do {
+        const matchEndDt: Date | null = duration ? addMinutes(matchStartDt!, duration) : dayEndDt;
+
+        if (
+          (dayEndDt ? isBefore(matchStartDt, dayEndDt) : true) &&
+          (dayEndDt && matchEndDt
+            ? isBefore(matchEndDt, dayEndDt) || isEqual(matchEndDt, dayEndDt)
+            : true)
+        ) {
+          yield {start_at: matchStartDt, end_at: matchEndDt, venues};
+        } else {
+          break;
+        }
+
+        matchStartDt = matchEndDt;
+        if (matchStartDt && gap) {
+          matchStartDt = addMinutes(matchStartDt, gap);
+        }
+      } while (matchStartDt);
+
+      dayStartDt = repeat ? addDays(dayStartDt, repeatDays) : null;
+
+      if (!dayStartDt || isBefore(dayStartDt, repeatEndDt)) {
+        break;
+      }
+    } while (dayStartDt);
+  })(this.rule, this.excludedDates);
+
+  constructor(private rule: InclusiveRule, private excludedDates: Interval[]) {}
+
+  get value() {
+    return this.#value || this.next();
+  }
+
+  grab() {
+    const value = this.#value;
+    this.#value = undefined;
+    return value;
+  }
+
+  private next() {
+    const {value} = this.#gen.next();
+    this.#value = value || undefined;
+    return this.#value;
+  }
+}
+
 @Component({
   selector: 'tn-match-scheduler',
   templateUrl: './match-scheduler.component.html',
@@ -44,6 +132,27 @@ export class MatchSchedulerComponent {
   defaultVenues = this.data.tournament.venues.slice(0, 1);
 
   rules = new BehaviorSubject<Rule[]>([]);
+
+  scheduledMatches = combineLatest([of(this.matches), this.rules]).pipe(
+    map(([matches, rules]) => {
+      const exclusiveRules = rules.filter(r => this.isExclusive(r)) as ExclusiveRule[];
+      const inclusiveRules = rules.filter(r => this.isInclusive(r)) as InclusiveRule[];
+
+      const excludedDates = exclusiveRules.map(
+        ({startOn, endOn}) => ({start: startOfDay(startOn), end: endOfDay(endOn)} as Interval),
+      );
+      let includedDatesGen = inclusiveRules.map(r => new MatchSlotGenerator(r, excludedDates));
+
+      return matches.map(match => {
+        includedDatesGen = includedDatesGen.filter(g => g.value);
+        includedDatesGen.sort((a, b) => compareAsc(a.value!.start_at, b.value!.start_at));
+
+        const candidate = includedDatesGen[0]?.grab();
+
+        return {...match, ...candidate};
+      });
+    }),
+  );
 
   addRule(f: NgForm, type: 'inclusive' | 'exclusive') {
     const rule = {...f.value, type} as Rule;

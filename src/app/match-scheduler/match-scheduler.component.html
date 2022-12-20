@@ -52,7 +52,7 @@
 
     <mat-form-field *ngIf="repeatModel.control.value">
       <mat-label>Every X days</mat-label>
-      <input matInput type="number" ngModel name="repeatDays" />
+      <input matInput type="number" ngModel name="repeatDays" required />
     </mat-form-field>
 
     <mat-form-field *ngIf="repeatModel.control.value">
@@ -136,7 +136,7 @@
 
   <div class="column shadow-md px-2">
     <mat-list>
-      <mat-list-item *ngFor="let m of matches">
+      <mat-list-item *ngFor="let m of scheduledMatches | async">
         <span matListItemTitle>{{ m.leftP?.name }} vs {{ m.rightP?.name }}</span>
         <span matListItemLine>{{ m.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
       </mat-list-item>
