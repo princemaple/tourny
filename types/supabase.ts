@@ -336,8 +336,7 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.stage.id"];
           name?: parameters["rowFilter.stage.name"];
-          /** Ordering */
-          order?: parameters["order"];
+          seq?: parameters["rowFilter.stage.seq"];
           tournament_id?: parameters["rowFilter.stage.tournament_id"];
           user_id?: parameters["rowFilter.stage.user_id"];
           created_at?: parameters["rowFilter.stage.created_at"];
@@ -347,6 +346,8 @@ export interface paths {
           default_winner_count?: parameters["rowFilter.stage.default_winner_count"];
           /** Filtering Columns */
           select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
           /** Limiting and Pagination */
           offset?: parameters["offset"];
           /** Limiting and Pagination */
@@ -395,7 +396,7 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.stage.id"];
           name?: parameters["rowFilter.stage.name"];
-          order?: parameters["rowFilter.stage.order"];
+          seq?: parameters["rowFilter.stage.seq"];
           tournament_id?: parameters["rowFilter.stage.tournament_id"];
           user_id?: parameters["rowFilter.stage.user_id"];
           created_at?: parameters["rowFilter.stage.created_at"];
@@ -419,7 +420,7 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.stage.id"];
           name?: parameters["rowFilter.stage.name"];
-          order?: parameters["rowFilter.stage.order"];
+          seq?: parameters["rowFilter.stage.seq"];
           tournament_id?: parameters["rowFilter.stage.tournament_id"];
           user_id?: parameters["rowFilter.stage.user_id"];
           created_at?: parameters["rowFilter.stage.created_at"];
@@ -449,11 +450,12 @@ export interface paths {
         query: {
           group_id?: parameters["rowFilter.group_participants.group_id"];
           participant_id?: parameters["rowFilter.group_participants.participant_id"];
-          /** Ordering */
-          order?: parameters["order"];
+          seq?: parameters["rowFilter.group_participants.seq"];
           created_at?: parameters["rowFilter.group_participants.created_at"];
           /** Filtering Columns */
           select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
           /** Limiting and Pagination */
           offset?: parameters["offset"];
           /** Limiting and Pagination */
@@ -502,7 +504,7 @@ export interface paths {
         query: {
           group_id?: parameters["rowFilter.group_participants.group_id"];
           participant_id?: parameters["rowFilter.group_participants.participant_id"];
-          order?: parameters["rowFilter.group_participants.order"];
+          seq?: parameters["rowFilter.group_participants.seq"];
           created_at?: parameters["rowFilter.group_participants.created_at"];
         };
         header: {
@@ -520,7 +522,7 @@ export interface paths {
         query: {
           group_id?: parameters["rowFilter.group_participants.group_id"];
           participant_id?: parameters["rowFilter.group_participants.participant_id"];
-          order?: parameters["rowFilter.group_participants.order"];
+          seq?: parameters["rowFilter.group_participants.seq"];
           created_at?: parameters["rowFilter.group_participants.created_at"];
         };
         body: {
@@ -557,6 +559,7 @@ export interface paths {
           next_match_id?: parameters["rowFilter.match.next_match_id"];
           best_of?: parameters["rowFilter.match.best_of"];
           venue_id?: parameters["rowFilter.match.venue_id"];
+          sequence?: parameters["rowFilter.match.sequence"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -622,6 +625,7 @@ export interface paths {
           next_match_id?: parameters["rowFilter.match.next_match_id"];
           best_of?: parameters["rowFilter.match.best_of"];
           venue_id?: parameters["rowFilter.match.venue_id"];
+          sequence?: parameters["rowFilter.match.sequence"];
         };
         header: {
           /** Preference */
@@ -651,6 +655,7 @@ export interface paths {
           next_match_id?: parameters["rowFilter.match.next_match_id"];
           best_of?: parameters["rowFilter.match.best_of"];
           venue_id?: parameters["rowFilter.match.venue_id"];
+          sequence?: parameters["rowFilter.match.sequence"];
         };
         body: {
           /** match */
@@ -673,8 +678,7 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.group.id"];
           name?: parameters["rowFilter.group.name"];
-          /** Ordering */
-          order?: parameters["order"];
+          seq?: parameters["rowFilter.group.seq"];
           tournament_id?: parameters["rowFilter.group.tournament_id"];
           stage_id?: parameters["rowFilter.group.stage_id"];
           user_id?: parameters["rowFilter.group.user_id"];
@@ -683,6 +687,8 @@ export interface paths {
           winner_count?: parameters["rowFilter.group.winner_count"];
           /** Filtering Columns */
           select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
           /** Limiting and Pagination */
           offset?: parameters["offset"];
           /** Limiting and Pagination */
@@ -731,7 +737,7 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.group.id"];
           name?: parameters["rowFilter.group.name"];
-          order?: parameters["rowFilter.group.order"];
+          seq?: parameters["rowFilter.group.seq"];
           tournament_id?: parameters["rowFilter.group.tournament_id"];
           stage_id?: parameters["rowFilter.group.stage_id"];
           user_id?: parameters["rowFilter.group.user_id"];
@@ -754,7 +760,7 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.group.id"];
           name?: parameters["rowFilter.group.name"];
-          order?: parameters["rowFilter.group.order"];
+          seq?: parameters["rowFilter.group.seq"];
           tournament_id?: parameters["rowFilter.group.tournament_id"];
           stage_id?: parameters["rowFilter.group.stage_id"];
           user_id?: parameters["rowFilter.group.user_id"];
@@ -885,7 +891,7 @@ export interface definitions {
      * Format: integer
      * @default 0
      */
-    order: number;
+    seq: number;
     /**
      * Format: uuid
      * @description Note:
@@ -933,7 +939,7 @@ export interface definitions {
      * Format: integer
      * @default 0
      */
-    order: number;
+    seq: number;
     /**
      * Format: timestamp with time zone
      * @default now()
@@ -1010,6 +1016,8 @@ export interface definitions {
      * This is a Foreign Key to `venue.id`.<fk table='venue' column='id'/>
      */
     venue_id?: string;
+    /** Format: jsonb */
+    sequence: unknown;
   };
   group: {
     /**
@@ -1025,7 +1033,7 @@ export interface definitions {
      * Format: integer
      * @default 0
      */
-    order: number;
+    seq: number;
     /**
      * Format: uuid
      * @description Note:
@@ -1145,7 +1153,7 @@ export interface parameters {
   /** Format: character varying */
   "rowFilter.stage.name": string;
   /** Format: integer */
-  "rowFilter.stage.order": string;
+  "rowFilter.stage.seq": string;
   /** Format: uuid */
   "rowFilter.stage.tournament_id": string;
   /** Format: uuid */
@@ -1167,7 +1175,7 @@ export interface parameters {
   /** Format: uuid */
   "rowFilter.group_participants.participant_id": string;
   /** Format: integer */
-  "rowFilter.group_participants.order": string;
+  "rowFilter.group_participants.seq": string;
   /** Format: timestamp with time zone */
   "rowFilter.group_participants.created_at": string;
   /** @description match */
@@ -1202,6 +1210,8 @@ export interface parameters {
   "rowFilter.match.best_of": string;
   /** Format: uuid */
   "rowFilter.match.venue_id": string;
+  /** Format: jsonb */
+  "rowFilter.match.sequence": string;
   /** @description group */
   "body.group": definitions["group"];
   /** Format: uuid */
@@ -1209,7 +1219,7 @@ export interface parameters {
   /** Format: character varying */
   "rowFilter.group.name": string;
   /** Format: integer */
-  "rowFilter.group.order": string;
+  "rowFilter.group.seq": string;
   /** Format: uuid */
   "rowFilter.group.tournament_id": string;
   /** Format: uuid */

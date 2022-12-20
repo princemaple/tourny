@@ -38,7 +38,7 @@ export class StageEditorComponent {
         user_id: this.supa.user!.id,
         tournament_id: this.tournament!.id,
         stage_id: s.id,
-        order: s.groups.length,
+        seq: s.groups.length,
         name: this.groupName(s.groups.length),
         winner_count: s.default_winner_count,
       } as definitions['group'])
@@ -53,7 +53,7 @@ export class StageEditorComponent {
   async fillParticipants(s: Stage) {
     const groupParticipants = this.tournament!.participants!.map((p, i) => {
       const g = s.groups[i % s.groups.length];
-      return {group_id: g.id, participant_id: p.id, order: Math.floor(i / s.groups.length)};
+      return {group_id: g.id, participant_id: p.id, seq: Math.floor(i / s.groups.length)};
     });
 
     const {error} = await this.supa.base.from('group_participants').upsert(groupParticipants);

@@ -9,9 +9,7 @@
   <mat-card-content class="flex-1">
     <pre class="whitespace-pre-wrap">{{ t.description }}</pre>
     <ol class="marker:text-slate-400">
-      <li *ngFor="let s of t.stage | sort : 'order'">
-        {{ s.name }} - {{ s.type | apply : casing }}
-      </li>
+      <li *ngFor="let s of t.stage | sort : 'seq'">{{ s.name }} - {{ s.type | apply : casing }}</li>
     </ol>
   </mat-card-content>
   <mat-card-actions>

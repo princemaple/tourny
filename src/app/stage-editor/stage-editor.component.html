@@ -10,7 +10,7 @@
   <mat-card-content class="!flex gap-4">
     <div
       class="relative p-4 mt-4 min-w-[20px] bg-slate-200 rounded"
-      *ngFor="let g of stage.groups | sort : 'order'"
+      *ngFor="let g of stage.groups | sort : 'seq'"
       cdkDropList
       [cdkDropListData]="g"
       (cdkDropListDropped)="changeGroup($event, stage)"

@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "sync-types": "npx openapi-typescript https://llulsymsupvwhcabnxxl.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsdWxzeW1zdXB2d2hjYWJueHhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTkyNTc5NTcsImV4cCI6MTk3NDgzMzk1N30.lyIpTvwNLnp3eANJ2_fuoRQlUtDl5BxSQqJqp6PkmrE --output types/supabase.ts"
+    "remote-types": "npx openapi-typescript https://llulsymsupvwhcabnxxl.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsdWxzeW1zdXB2d2hjYWJueHhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTkyNTc5NTcsImV4cCI6MTk3NDgzMzk1N30.lyIpTvwNLnp3eANJ2_fuoRQlUtDl5BxSQqJqp6PkmrE --output types/supabase.ts",
+    "local-types": "npx openapi-typescript http://localhost:54323/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0 --output types/supabase.ts"
   },
   "private": true,
   "dependencies": {

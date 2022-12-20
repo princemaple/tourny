@@ -17,7 +17,9 @@ export function genRoundRobinMatches(s: Stage) {
     const odd = g.participants.length % 2;
     let [p1, ...rest] = g.participants;
 
-    for (let _ of new Array(odd ? g.participants.length : rest.length)) {
+    for (let round of new Array(odd ? g.participants.length : rest.length)
+      .fill(0)
+      .map((_, i) => i + 1)) {
       const list = [p1, ...rest];
 
       while (list.length) {
@@ -31,6 +33,7 @@ export function genRoundRobinMatches(s: Stage) {
           left: left!.id,
           right: right?.id,
           games: genN(s.default_best_of),
+          sequence: {round, seq: matches.length + 1},
           best_of: s.default_best_of,
         } as definitions['match']);
       }

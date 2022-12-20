@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
-import {omit} from 'lodash-es';
+import {omit, sortBy} from 'lodash-es';
 import {BehaviorSubject, combineLatest, map, of} from 'rxjs';
 import {
   Interval,
@@ -136,7 +136,7 @@ export class MatchSchedulerComponent {
 
   rules = new BehaviorSubject<Rule[]>([]);
 
-  scheduledMatches = combineLatest([of(this.matches), this.rules]).pipe(
+  scheduledMatches = combineLatest([of(sortBy(this.matches, 'sequence.seq')), this.rules]).pipe(
     map(([matches, rules]) => {
       const exclusiveRules = rules.filter(r => this.isExclusive(r)) as ExclusiveRule[];
       const inclusiveRules = rules.filter(r => this.isInclusive(r)) as InclusiveRule[];
