@@ -31,6 +31,7 @@ export function genRoundRobinMatches(s: Stage) {
           left: left!.id,
           right: right?.id,
           games: genN(s.default_best_of),
+          best_of: s.default_best_of,
         } as definitions['match']);
       }
 
@@ -59,6 +60,7 @@ export function genEliminationMatches(s: Stage) {
         stage_id: s.id,
         group_id: g.id,
         games: genN(s.default_best_of),
+        best_of: s.default_best_of,
         next_match_id: matches[Math.floor(index / 2)]?.id,
       } as definitions['match']);
 
