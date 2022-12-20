@@ -6,6 +6,7 @@ export type MatchNode = definitions['match'] & {
   leftChild: MatchNode;
   rightP: {name: string} | null;
   rightChild: MatchNode;
+  venue: {name: string} | null;
 };
 
 @Component({

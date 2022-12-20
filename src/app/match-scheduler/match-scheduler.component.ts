@@ -14,6 +14,7 @@ import {
   addDays,
   compareAsc,
   isWithinInterval,
+  isAfter,
 } from 'date-fns';
 
 import {definitions} from 'types/supabase';
@@ -59,7 +60,7 @@ class MatchSlotGenerator {
   #gen = (function* (rule: InclusiveRule, excludedDates: Interval[]) {
     const {startOn, startAt, endAt, endOn, duration, gap, repeat, repeatDays, venues} = rule;
 
-    const repeatEndDt = endOfDay(endOn);
+    const repeatEndDt = endOn ? endOfDay(endOn) : null;
 
     let dayStartDt: Date | null = mergeDateTime(startOn, startAt);
 
@@ -96,7 +97,7 @@ class MatchSlotGenerator {
 
       dayStartDt = repeat ? addDays(dayStartDt, repeatDays) : null;
 
-      if (!dayStartDt || isBefore(dayStartDt, repeatEndDt)) {
+      if (!dayStartDt || (repeatEndDt && isAfter(dayStartDt, repeatEndDt))) {
         break;
       }
     } while (dayStartDt);

@@ -1,7 +1,15 @@
-<header class="flex justify-center">
-  <span *ngIf="match.left; else tbd">
+<header class="flex flex-col text-center">
+  <div *ngIf="match.left; else tbd">
     {{ match.leftP!.name }}<span *ngIf="match.right; else bye"> vs {{ match.rightP!.name }}</span>
-  </span>
+  </div>
+
+  <small>
+    <span>{{ match.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
+    <span *ngIf="match.end_at"> - {{ match.end_at | date : 'HH:mm' }}</span>
+  </small>
+
+  <small>{{ match.venue?.name }}</small>
+
   <ng-template #bye> gets a BYE!</ng-template>
   <ng-template #tbd><span>TBD</span></ng-template>
 </header>

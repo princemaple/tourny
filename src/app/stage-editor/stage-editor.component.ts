@@ -144,6 +144,17 @@ export class StageEditorComponent {
     this.dialog
       .open(MatchSchedulerComponent, {data: {stage: s, tournament: this.tournament}})
       .afterClosed()
-      .subscribe(console.log);
+      .pipe(filter(Boolean))
+      .subscribe(async (matches: Stage['matches']) => {
+        await this.supa.base.from('match').update(
+          matches.map(({id, start_at, end_at, venue}) => ({
+            id,
+            start_at,
+            end_at,
+            venue_id: venue?.id ?? null,
+          })),
+        );
+        this.change.emit(s);
+      });
   }
 }
