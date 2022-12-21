@@ -8,7 +8,7 @@
   </section>
 </ng-container>
 
-<div class="absolute -top-4 -right-8 flex flex-col">
+<div *ngIf="matches.length" class="absolute -top-4 -right-8 flex flex-col">
   <button mat-icon-button matTooltip="Copy and paste in spreadsheets" (click)="copy()">
     <mat-icon>description</mat-icon>
   </button>
