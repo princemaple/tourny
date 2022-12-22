@@ -150,7 +150,12 @@
 
 <mat-dialog-actions align="end">
   <button mat-button matDialogClose>Cancel</button>
-  <button mat-button color="primary" [matDialogClose]="scheduledMatches | async">
+  <button
+    mat-button
+    color="primary"
+    [matDialogClose]="scheduledMatches | async"
+    (click)="saveSchedule()"
+  >
     Apply Schedule
   </button>
 </mat-dialog-actions>

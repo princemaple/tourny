@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
@@ -127,7 +127,7 @@ class MatchSlotGenerator {
   templateUrl: './match-scheduler.component.html',
   styleUrls: ['./match-scheduler.component.scss'],
 })
-export class MatchSchedulerComponent {
+export class MatchSchedulerComponent implements OnInit {
   ref = inject(MatDialogRef<any>);
   data: {stage: Stage; tournament: Tournament} = inject(MAT_DIALOG_DATA);
 
@@ -157,6 +157,16 @@ export class MatchSchedulerComponent {
     }),
   );
 
+  ngOnInit() {
+    let rules: string | null;
+    if (
+      (rules = localStorage.getItem('RECENT_SCHEDULE')) &&
+      confirm('Revive the rules from last time?')
+    ) {
+      this.rules.next(JSON.parse(rules));
+    }
+  }
+
   addRule(f: NgForm, type: 'inclusive' | 'exclusive') {
     const rule = {...f.value, type} as Rule;
     this.rules.next([...this.rules.value, rule]);
@@ -173,5 +183,9 @@ export class MatchSchedulerComponent {
 
   isExclusive(r: Rule): r is ExclusiveRule {
     return r.type == 'exclusive';
+  }
+
+  saveSchedule() {
+    localStorage.setItem('RECENT_SCHEDULE', JSON.stringify(this.rules.value));
   }
 }
