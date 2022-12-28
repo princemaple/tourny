@@ -19,6 +19,7 @@ import {
 
 import {definitions} from 'types/supabase';
 import {Data as Tournament} from '../tournament-setup/tournament-setup.component';
+import {CdkDragSortEvent, moveItemInArray} from '@angular/cdk/drag-drop';
 
 type Stage = Tournament['stages'][number];
 
@@ -131,12 +132,16 @@ export class MatchSchedulerComponent implements OnInit {
   ref = inject(MatDialogRef<any>);
   data: {stage: Stage; tournament: Tournament} = inject(MAT_DIALOG_DATA);
 
-  matches = this.data.stage.matches.filter(m => m.left && m.right);
+  #matches = sortBy(
+    this.data.stage.matches.filter(m => m.left && m.right),
+    'sequence.seq',
+  );
+  matches = new BehaviorSubject(this.#matches);
   defaultVenues = this.data.tournament.venues.slice(0, 1);
 
   rules = new BehaviorSubject<Rule[]>([]);
 
-  scheduledMatches = combineLatest([of(sortBy(this.matches, 'sequence.seq')), this.rules]).pipe(
+  scheduledMatches = combineLatest([this.matches, this.rules]).pipe(
     map(([matches, rules]) => {
       const exclusiveRules = rules.filter(r => this.isExclusive(r)) as ExclusiveRule[];
       const inclusiveRules = rules.filter(r => this.isInclusive(r)) as InclusiveRule[];
@@ -187,5 +192,10 @@ export class MatchSchedulerComponent implements OnInit {
 
   saveSchedule() {
     localStorage.setItem('RECENT_SCHEDULE', JSON.stringify(this.rules.value));
+  }
+
+  swapPosition(event: CdkDragSortEvent) {
+    moveItemInArray(this.#matches, event.previousIndex, event.currentIndex);
+    this.matches.next(this.#matches);
   }
 }
