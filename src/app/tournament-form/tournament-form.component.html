@@ -50,7 +50,7 @@
     <h4>Tournament Stages</h4>
 
     <mat-card appearance="outlined" *modelArrayItem="let stage">
-      <mat-card-content class="!flex gap-4">
+      <mat-card-content class="!grid grid-cols-2 gap-4 items-baseline">
         <mat-form-field>
           <mat-label>Stage Name</mat-label>
           <input matInput [(ngModel)]="stage.name" required />
@@ -65,13 +65,16 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field
-          class="w-[64px]"
-          matTooltip="Default, can change per match"
-          matTooltipPosition="right"
-        >
-          <mat-label>Best Of</mat-label>
+        <mat-form-field>
+          <mat-label>Default Best Of</mat-label>
           <input matInput type="number" min="1" [(ngModel)]="stage.default_best_of" required />
+          <mat-hint>* can change per match</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Default Winners</mat-label>
+          <input matInput type="number" min="1" [(ngModel)]="stage.default_winner_count" required />
+          <mat-hint>* can change per group</mat-hint>
         </mat-form-field>
       </mat-card-content>
     </mat-card>
