@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.0.3",
-    "@angular/cli": "~15.0.3",
+    "@angular/cli": "~15.2.0",
     "@angular/compiler-cli": "^15.0.3",
     "@types/lodash-es": "^4.17.6",
     "tailwindcss": "^3.1.7",
