@@ -29,8 +29,8 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular/build": "^19.2.15",
-    "@angular/cli": "~19.2.15",
+    "@angular/build": "^20.0.0",
+    "@angular/cli": "~20.1.0",
     "@angular/compiler-cli": "^19.2.14",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^22.16.4",
