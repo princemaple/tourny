@@ -1,22 +1,28 @@
-<mat-card appearance="outlined" *ngFor="let t of tournaments" class="!flex flex-col">
-  <mat-card-header>
-    <mat-card-title>{{ t.name }}</mat-card-title>
-    <mat-card-subtitle>
-      <span>{{ t.start_at | date }}</span>
-      <span *ngIf="t.end_at"> - {{ t.end_at | date }}</span>
-    </mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content class="flex-1">
-    <pre class="whitespace-pre-wrap">{{ t.description }}</pre>
-    <ol class="marker:text-slate-400">
-      <li *ngFor="let s of t.stage | sort : 'seq'">{{ s.name }} - {{ s.type | apply : casing }}</li>
-    </ol>
-  </mat-card-content>
-  <mat-card-actions>
-    <a mat-button color="primary" routerLink="/tournaments/{{ t.id }}/edit">Edit</a>
-    <a mat-button color="primary" routerLink="/tournaments/{{ t.id }}/setup">Setup</a>
-  </mat-card-actions>
-</mat-card>
+@for (t of tournaments; track t) {
+  <mat-card appearance="outlined" class="!flex flex-col">
+    <mat-card-header>
+      <mat-card-title>{{ t.name }}</mat-card-title>
+      <mat-card-subtitle>
+        <span>{{ t.start_at | date }}</span>
+        @if (t.end_at) {
+          <span> - {{ t.end_at | date }}</span>
+        }
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="flex-1">
+      <pre class="whitespace-pre-wrap">{{ t.description }}</pre>
+      <ol class="marker:text-slate-400">
+        @for (s of t.stage | sort : 'seq'; track s) {
+          <li>{{ s.name }} - {{ s.type | apply : casing }}</li>
+        }
+      </ol>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button color="primary" routerLink="/tournaments/{{ t.id }}/edit">Edit</a>
+      <a mat-button color="primary" routerLink="/tournaments/{{ t.id }}/setup">Setup</a>
+    </mat-card-actions>
+  </mat-card>
+}
 
 <mat-card appearance="outlined">
   <mat-card-content class="h-full !flex flex-col justify-center items-center">

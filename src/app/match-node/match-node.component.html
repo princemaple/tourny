@@ -1,20 +1,32 @@
 <header class="flex flex-col text-center">
-  <div *ngIf="match.left; else tbd">
-    {{ match.leftP!.name }}<span *ngIf="match.right; else bye"> vs {{ match.rightP!.name }}</span>
+  @if (match.left) {
+    <div>
+      {{ match.leftP!.name }}@if (match.right) {
+      <span> vs {{ match.rightP!.name }}</span>
+    } @else {
+      gets a BYE!
+    }
   </div>
+} @else {
+  <span>TBD</span>
+}
 
-  <small>
-    <span>{{ match.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
-    <span *ngIf="match.end_at"> - {{ match.end_at | date : 'HH:mm' }}</span>
-  </small>
+<small>
+  <span>{{ match.start_at | date : 'yyyy-MM-dd HH:mm' }}</span>
+  @if (match.end_at) {
+    <span> - {{ match.end_at | date : 'HH:mm' }}</span>
+  }
+</small>
 
-  <small>{{ match.venue?.name }}</small>
+<small>{{ match.venue?.name }}</small>
 
-  <ng-template #bye> gets a BYE!</ng-template>
-  <ng-template #tbd><span>TBD</span></ng-template>
 </header>
 
 <section class="flex gap-4 justify-center">
-  <tn-match-node *ngIf="match.leftChild" [match]="match.leftChild"></tn-match-node>
-  <tn-match-node *ngIf="match.rightChild" [match]="match.rightChild"></tn-match-node>
+  @if (match.leftChild) {
+    <tn-match-node [match]="match.leftChild"></tn-match-node>
+  }
+  @if (match.rightChild) {
+    <tn-match-node [match]="match.rightChild"></tn-match-node>
+  }
 </section>

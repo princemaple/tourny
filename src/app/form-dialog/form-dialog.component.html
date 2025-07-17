@@ -1,6 +1,8 @@
-<h2 mat-dialog-title *ngIf="data.title">
-  {{ data.title }}
-</h2>
+@if (data.title) {
+  <h2 mat-dialog-title>
+    {{ data.title }}
+  </h2>
+}
 
 <form
   id="form-dialog-form"
@@ -8,88 +10,103 @@
   class="!flex flex-col"
   #f="ngForm"
   (ngSubmit)="ref.close(f.value)"
->
-  <ng-container *ngFor="let field of data.fields" [ngSwitch]="field.type">
-    <mat-form-field *ngSwitchCase="'select'">
-      <mat-label>{{ field.label || field.name }}</mat-label>
-      <mat-select
-        [ngModel]="field.default"
-        [name]="field.name"
-        [required]="field.required ?? false"
-        [disabled]="field.disabled ?? false"
-        [placeholder]="field.placeholder ?? ''"
-      >
-        <mat-option
-          *ngFor="let option of field.options"
-          [value]="option.value"
-          [disabled]="option.disabled"
-        >
-          {{ option.label }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field *ngSwitchCase="'textarea'">
-      <mat-label>{{ field.label ?? field.name }}</mat-label>
-      <textarea
-        matInput
-        [ngModel]="field.default"
-        [name]="field.name"
-        [required]="field.required ?? false"
-        [disabled]="field.disabled ?? false"
-        [placeholder]="field.placeholder ?? ''"
-        rows="6"
-      ></textarea>
-    </mat-form-field>
-
-    <mat-radio-group
-      *ngSwitchCase="'radio'"
-      class="!flex flex-col gap-4"
-      [ngModel]="field.default"
-      [name]="field.name"
-      [required]="field.required ?? false"
-      [disabled]="field.disabled ?? false"
-    >
-      <mat-radio-button *ngFor="let option of field.options" [value]="option.value">
-        {{ option.label }}
-      </mat-radio-button>
-    </mat-radio-group>
-
-    <!-- workaround -->
-    <mat-form-field *ngSwitchCase="'number'">
-      <mat-label>{{ field.label ?? field.name }}</mat-label>
-      <input
-        matInput
-        type="number"
-        [ngModel]="field.default"
-        [name]="field.name"
-        [required]="field.required ?? false"
-        [readonly]="field.readonly ?? false"
-        [disabled]="field.disabled ?? false"
-        [placeholder]="field.placeholder ?? ''"
-        [min]="field.min ?? ''"
-        [max]="field.max ?? ''"
-      />
-      <span matSuffix *ngIf="field.suffix">{{ field.suffix }}</span>
-    </mat-form-field>
-
-    <input *ngSwitchCase="'hidden'" type="hidden" [ngModel]="field.default" [name]="field.name" />
-
-    <mat-form-field *ngSwitchDefault>
-      <mat-label>{{ field.label ?? field.name }}</mat-label>
-      <input
-        matInput
-        [type]="field.type ?? 'text'"
-        [ngModel]="field.default"
-        [name]="field.name"
-        [required]="field.required ?? false"
-        [readonly]="field.readonly ?? false"
-        [disabled]="field.disabled ?? false"
-        [placeholder]="field.placeholder ?? ''"
-      />
-      <span matSuffix *ngIf="field.suffix">{{ field.suffix }}</span>
-    </mat-form-field>
-  </ng-container>
+  >
+  @for (field of data.fields; track field) {
+    @switch (field.type) {
+      @case ('select') {
+        <mat-form-field>
+          <mat-label>{{ field.label || field.name }}</mat-label>
+          <mat-select
+            [ngModel]="field.default"
+            [name]="field.name"
+            [required]="field.required ?? false"
+            [disabled]="field.disabled ?? false"
+            [placeholder]="field.placeholder ?? ''"
+            >
+            @for (option of field.options; track option) {
+              <mat-option
+                [value]="option.value"
+                [disabled]="option.disabled"
+                >
+                {{ option.label }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+      @case ('textarea') {
+        <mat-form-field>
+          <mat-label>{{ field.label ?? field.name }}</mat-label>
+          <textarea
+            matInput
+            [ngModel]="field.default"
+            [name]="field.name"
+            [required]="field.required ?? false"
+            [disabled]="field.disabled ?? false"
+            [placeholder]="field.placeholder ?? ''"
+            rows="6"
+          ></textarea>
+        </mat-form-field>
+      }
+      @case ('radio') {
+        <mat-radio-group
+          class="!flex flex-col gap-4"
+          [ngModel]="field.default"
+          [name]="field.name"
+          [required]="field.required ?? false"
+          [disabled]="field.disabled ?? false"
+          >
+          @for (option of field.options; track option) {
+            <mat-radio-button [value]="option.value">
+              {{ option.label }}
+            </mat-radio-button>
+          }
+        </mat-radio-group>
+      }
+      <!-- workaround -->
+      @case ('number') {
+        <mat-form-field>
+          <mat-label>{{ field.label ?? field.name }}</mat-label>
+          <input
+            matInput
+            type="number"
+            [ngModel]="field.default"
+            [name]="field.name"
+            [required]="field.required ?? false"
+            [readonly]="field.readonly ?? false"
+            [disabled]="field.disabled ?? false"
+            [placeholder]="field.placeholder ?? ''"
+            [min]="field.min ?? ''"
+            [max]="field.max ?? ''"
+            />
+          @if (field.suffix) {
+            <span matSuffix>{{ field.suffix }}</span>
+          }
+        </mat-form-field>
+      }
+      @case ('hidden') {
+        <input type="hidden" [ngModel]="field.default" [name]="field.name" />
+      }
+      @default {
+        <mat-form-field>
+          <mat-label>{{ field.label ?? field.name }}</mat-label>
+          <input
+            matInput
+            [type]="field.type ?? 'text'"
+            [ngModel]="field.default"
+            [name]="field.name"
+            [required]="field.required ?? false"
+            [readonly]="field.readonly ?? false"
+            [disabled]="field.disabled ?? false"
+            [placeholder]="field.placeholder ?? ''"
+            />
+          @if (field.suffix) {
+            <span matSuffix>{{ field.suffix }}</span>
+          }
+        </mat-form-field>
+      }
+    }
+  }
 
   <ng-container
     *ngTemplateOutlet="data.otherFields; context: data.otherContext; injector: injector"

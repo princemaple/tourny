@@ -1,7 +1,7 @@
 <div class="min-w-[360px] flex flex-col items-stretch px-4">
   <header
     class="flex justify-between items-center mb-4 sticky top-0 z-10 bg-white/[0.85] -mx-4 px-2"
-  >
+    >
     <a mat-icon-button routerLink="/dashboard">
       <mat-icon>arrow_back</mat-icon>
     </a>
@@ -13,17 +13,21 @@
       </a>
     </h2>
 
-    <mat-icon
-      *ngIf="loading.count | async as c; else check"
-      class="animate-spin"
-      fontIcon="sync"
-    ></mat-icon>
-    <ng-template #check><mat-icon fontIcon="check_circle"></mat-icon></ng-template>
+    @if (loading.count | async; as c) {
+      <mat-icon
+        class="animate-spin"
+        fontIcon="sync"
+      ></mat-icon>
+    } @else {
+      <mat-icon fontIcon="check_circle"></mat-icon>
+    }
   </header>
 
   <section>
     <span>{{ tournament?.start_at | date }}</span>
-    <span *ngIf="tournament?.end_at"> - {{ tournament?.end_at | date }}</span>
+    @if (tournament?.end_at) {
+      <span> - {{ tournament?.end_at | date }}</span>
+    }
 
     <pre class="whitespace-pre-wrap">{{ tournament?.description }}</pre>
   </section>
@@ -32,15 +36,17 @@
     <h3>Venue</h3>
 
     <mat-list>
-      <mat-list-item *ngFor="let venue of tournament?.venues">
-        <span matListItemTitle>{{ venue.name }}</span>
-        <span>{{ venue.description }}</span>
-        <div matListItemMeta>
-          <button mat-icon-button color="warn" (click)="delVenue(venue)">
-            <mat-icon>clear</mat-icon>
-          </button>
-        </div>
-      </mat-list-item>
+      @for (venue of tournament?.venues; track venue) {
+        <mat-list-item>
+          <span matListItemTitle>{{ venue.name }}</span>
+          <span>{{ venue.description }}</span>
+          <div matListItemMeta>
+            <button mat-icon-button color="warn" (click)="delVenue(venue)">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+      }
     </mat-list>
 
     <div class="flex gap-4 justify-center">
@@ -56,18 +62,21 @@
       tennis tournament.
     </div>
 
-    <mat-chip-set
-      class="mb-4"
-      *ngIf="tournament?.participants?.length"
-      aria-label="participant list"
-    >
-      <mat-chip *ngFor="let p of tournament?.participants" (removed)="removeParticipant(p)">
-        {{ p.name }}
-        <button matChipRemove>
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip>
-    </mat-chip-set>
+    @if (tournament?.participants?.length) {
+      <mat-chip-set
+        class="mb-4"
+        aria-label="participant list"
+        >
+        @for (p of tournament?.participants; track p) {
+          <mat-chip (removed)="removeParticipant(p)">
+            {{ p.name }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+        }
+      </mat-chip-set>
+    }
 
     <div class="flex gap-4 justify-center">
       <button mat-button color="primary" type="button" (click)="addParticipant()">
@@ -82,12 +91,12 @@
 
   <h3>Stages</h3>
 
-  <ng-container *ngFor="let stage of tournament?.stages; index as i">
+  @for (stage of tournament?.stages; track stage; let i = $index) {
     <tn-stage-editor
       [tournament]="tournament!"
       [stage]="stage"
       [index]="i"
       (change)="loadStage($event)"
     ></tn-stage-editor>
-  </ng-container>
+  }
 </div>

@@ -1,18 +1,23 @@
-<ng-container *ngFor="let group of matchGroups | keyvalue; count as groupCount">
-  <h4 *ngIf="groupCount > 1" class="my-2">Group {{ group.key }}</h4>
+@for (group of matchGroups | keyvalue; track group; let groupCount = $count) {
+  @if (groupCount > 1) {
+    <h4 class="my-2">Group {{ group.key }}</h4>
+  }
   <section class="flex flex-wrap gap-4 mb-4 items-start">
-    <tn-match-node
-      *ngFor="let match of group.value | sort : 'sequence.seq'"
-      [match]="match"
-    ></tn-match-node>
+    @for (match of group.value | sort : 'sequence.seq'; track match) {
+      <tn-match-node
+        [match]="match"
+      ></tn-match-node>
+    }
   </section>
-</ng-container>
+}
 
-<div *ngIf="matches.length" class="absolute -top-4 -right-8 flex flex-col">
-  <button mat-icon-button matTooltip="Copy and paste in spreadsheets" (click)="copy()">
-    <mat-icon>description</mat-icon>
-  </button>
-  <button mat-icon-button matTooltip="Download CSV export" (click)="download()">
-    <mat-icon>download</mat-icon>
-  </button>
-</div>
+@if (matches.length) {
+  <div class="absolute -top-4 -right-8 flex flex-col">
+    <button mat-icon-button matTooltip="Copy and paste in spreadsheets" (click)="copy()">
+      <mat-icon>description</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="Download CSV export" (click)="download()">
+      <mat-icon>download</mat-icon>
+    </button>
+  </div>
+}
