@@ -10,9 +10,10 @@ import {SupaService} from '../supa.service';
 type Data = Partial<definitions['tournament'] & {stage: definitions['stage'][]}>;
 
 @Component({
-  selector: 'tn-tournament-form',
-  templateUrl: './tournament-form.component.html',
-  styleUrls: ['./tournament-form.component.scss'],
+    selector: 'tn-tournament-form',
+    templateUrl: './tournament-form.component.html',
+    styleUrls: ['./tournament-form.component.scss'],
+    standalone: false
 })
 export class TournamentFormComponent {
   params = {meta: {}, stage: [this.newStage()]} as Data;

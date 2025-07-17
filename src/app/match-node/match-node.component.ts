@@ -10,12 +10,13 @@ export type MatchNode = definitions['match'] & {
 };
 
 @Component({
-  selector: 'tn-match-node',
-  templateUrl: './match-node.component.html',
-  styleUrls: ['./match-node.component.scss'],
-  host: {
-    '[class.child]': '!!match.next_match_id',
-  },
+    selector: 'tn-match-node',
+    templateUrl: './match-node.component.html',
+    styleUrls: ['./match-node.component.scss'],
+    host: {
+        '[class.child]': '!!match.next_match_id',
+    },
+    standalone: false
 })
 export class MatchNodeComponent implements OnInit {
   @Input() match!: MatchNode;

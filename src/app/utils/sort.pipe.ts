@@ -2,7 +2,10 @@ import {Pipe, PipeTransform} from '@angular/core';
 
 import {orderBy} from 'lodash-es';
 
-@Pipe({name: 'sort'})
+@Pipe({
+    name: 'sort',
+    standalone: false
+})
 export class SortPipe implements PipeTransform {
   transform<T>(value: T[] | Set<T> | null | undefined, properties: string[]): T[];
   transform<T>(value: T[] | Set<T> | null | undefined, ...properties: string[]): T[];

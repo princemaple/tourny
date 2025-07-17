@@ -15,9 +15,10 @@ import {MatchSchedulerComponent} from '../match-scheduler/match-scheduler.compon
 type Stage = Tournament['stages'][number];
 
 @Component({
-  selector: 'tn-stage-editor',
-  templateUrl: './stage-editor.component.html',
-  styleUrls: ['./stage-editor.component.scss'],
+    selector: 'tn-stage-editor',
+    templateUrl: './stage-editor.component.html',
+    styleUrls: ['./stage-editor.component.scss'],
+    standalone: false
 })
 export class StageEditorComponent {
   @Input() tournament!: Tournament;

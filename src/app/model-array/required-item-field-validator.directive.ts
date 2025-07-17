@@ -2,14 +2,15 @@ import {Directive, Input} from '@angular/core';
 import {AbstractControl, NG_VALIDATORS, Validator} from '@angular/forms';
 
 @Directive({
-  selector: '[requiredItemField]',
-  providers: [
-    {
-      provide: NG_VALIDATORS,
-      useExisting: RequiredItemFieldValidator,
-      multi: true,
-    },
-  ],
+    selector: '[requiredItemField]',
+    providers: [
+        {
+            provide: NG_VALIDATORS,
+            useExisting: RequiredItemFieldValidator,
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class RequiredItemFieldValidator implements Validator {
   #fields: string[] = [];

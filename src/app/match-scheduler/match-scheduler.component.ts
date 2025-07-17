@@ -124,9 +124,10 @@ class MatchSlotGenerator {
 }
 
 @Component({
-  selector: 'tn-match-scheduler',
-  templateUrl: './match-scheduler.component.html',
-  styleUrls: ['./match-scheduler.component.scss'],
+    selector: 'tn-match-scheduler',
+    templateUrl: './match-scheduler.component.html',
+    styleUrls: ['./match-scheduler.component.scss'],
+    standalone: false
 })
 export class MatchSchedulerComponent implements OnInit {
   ref = inject(MatDialogRef<any>);

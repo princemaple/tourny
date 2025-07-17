@@ -6,11 +6,12 @@ import {CVA} from '../cva';
 import {ModelArrayItem} from './model-array-item.directive';
 
 @Component({
-  selector: 'model-array',
-  templateUrl: './model-array.component.html',
-  styleUrls: ['./model-array.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: ModelArrayComponent, multi: true}],
+    selector: 'model-array',
+    templateUrl: './model-array.component.html',
+    styleUrls: ['./model-array.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: ModelArrayComponent, multi: true }],
+    standalone: false
 })
 export class ModelArrayComponent<T> extends CVA {
   @ContentChild(ModelArrayItem, {static: true}) item!: ModelArrayItem;

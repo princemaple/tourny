@@ -8,9 +8,10 @@ import {SupaService} from '../supa.service';
 type Data = Partial<definitions['tournament']> & {stage: definitions['stage'][]};
 
 @Component({
-  selector: 'tn-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+    selector: 'tn-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
+    standalone: false
 })
 export class DashboardComponent implements OnInit {
   tournaments: Data[] = [];

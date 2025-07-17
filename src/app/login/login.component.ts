@@ -28,18 +28,17 @@ class AddIcons {
 }
 
 @Component({
-  selector: 'oc-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDividerModule,
-  ],
+    selector: 'oc-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    imports: [
+        FormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDividerModule,
+    ]
 })
 export class LoginComponent {
   sending = false;

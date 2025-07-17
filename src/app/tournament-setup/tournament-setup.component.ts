@@ -30,9 +30,10 @@ const StageQuery = `
 `;
 
 @Component({
-  selector: 'tn-tournament-setup',
-  templateUrl: './tournament-setup.component.html',
-  styleUrls: ['./tournament-setup.component.scss'],
+    selector: 'tn-tournament-setup',
+    templateUrl: './tournament-setup.component.html',
+    styleUrls: ['./tournament-setup.component.scss'],
+    standalone: false
 })
 export class TournamentSetupComponent {
   tournament: Data | null = null;

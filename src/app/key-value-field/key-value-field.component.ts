@@ -7,9 +7,10 @@ import {orderBy} from 'lodash-es';
 import {CVA} from '../cva';
 
 @Component({
-  selector: 'key-value',
-  templateUrl: './key-value-field.component.html',
-  styleUrls: ['./key-value-field.component.css'],
+    selector: 'key-value',
+    templateUrl: './key-value-field.component.html',
+    styleUrls: ['./key-value-field.component.css'],
+    standalone: false
 })
 export class KeyValueFieldComponent extends CVA {
   @Input() title = 'Extra Info';

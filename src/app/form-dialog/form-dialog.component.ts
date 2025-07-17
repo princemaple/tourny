@@ -33,19 +33,18 @@ export type TemplateData = {
 };
 
 @Component({
-  selector: 'form-dialog',
-  templateUrl: './form-dialog.component.html',
-  standalone: true,
-  imports: [
-    FormsModule,
-    CommonModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatDialogModule,
-  ],
+    selector: 'form-dialog',
+    templateUrl: './form-dialog.component.html',
+    imports: [
+        FormsModule,
+        CommonModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatDialogModule,
+    ]
 })
 export class FormDialogComponent implements OnInit {
   @ViewChild(NgForm, {static: true}) form!: NgForm;

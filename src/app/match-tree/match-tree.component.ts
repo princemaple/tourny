@@ -8,10 +8,11 @@ import {MatchNode} from '../match-node/match-node.component';
 import {makeTable} from '../utils/table';
 
 @Component({
-  selector: 'tn-match-tree',
-  templateUrl: './match-tree.component.html',
-  styleUrls: ['./match-tree.component.scss'],
-  host: {class: 'block relative'},
+    selector: 'tn-match-tree',
+    templateUrl: './match-tree.component.html',
+    styleUrls: ['./match-tree.component.scss'],
+    host: { class: 'block relative' },
+    standalone: false
 })
 export class MatchTreeComponent implements OnChanges {
   @Input() groups!: definitions['group'][];
