@@ -86,10 +86,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "tourny:build:production"
+              "buildTarget": "tourny:build:production"
             },
             "development": {
-              "browserTarget": "tourny:build:development"
+              "buildTarget": "tourny:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -97,7 +97,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "tourny:build"
+            "buildTarget": "tourny:build"
           }
         }
       }
