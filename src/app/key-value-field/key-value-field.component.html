@@ -1,25 +1,25 @@
-@if (!fieldsOnly) {
-  <mat-expansion-panel [expanded]="expanded">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{ title }}
-      </mat-panel-title>
-      <mat-panel-description [style.flex-wrap]="'wrap'">
-        @for (kv of _value; track kv) {
-          <span class="key-desc">{{ kv[0] }}</span>
-        }
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <ng-template matExpansionPanelContent>
-      <ng-container [ngTemplateOutlet]="value"></ng-container>
-    </ng-template>
-    <mat-action-row>
-      <button type="button" mat-button color="primary" (click)="addKey()">
-        {{ addButtonText }}
-      </button>
-    </mat-action-row>
-  </mat-expansion-panel>
-} @else {
+<mat-expansion-panel [expanded]="expanded">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{ title }}
+    </mat-panel-title>
+    <mat-panel-description [style.flex-wrap]="'wrap'">
+      @for (kv of _value; track kv) {
+        <span class="key-desc">{{ kv[0] }}</span>
+      }
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <ng-template matExpansionPanelContent>
+    <ng-container [ngTemplateOutlet]="fields"></ng-container>
+  </ng-template>
+  <mat-action-row>
+    <button type="button" mat-button color="primary" (click)="addKey()">
+      {{ addButtonText }}
+    </button>
+  </mat-action-row>
+</mat-expansion-panel>
+
+<ng-template #fields>
   @for (kv of _value; track trackByFn($index, kv)) {
     <div class="flex items-center gap-2">
       <mat-form-field class="key">
@@ -51,5 +51,4 @@
       </button>
     </div>
   }
-}
-
+</ng-template>

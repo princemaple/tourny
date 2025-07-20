@@ -25,15 +25,6 @@ export class KeyValueFieldComponent extends CVA {
     this.#expanded = coerceBooleanProperty(v);
   }
 
-  #fieldsOnly = false;
-  @Input()
-  get fieldsOnly() {
-    return this.#fieldsOnly;
-  }
-  set fieldsOnly(v: boolean | string) {
-    this.#fieldsOnly = coerceBooleanProperty(v);
-  }
-
   _value: [string, string][] = [];
   @Input()
   get value() {
